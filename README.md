@@ -9,7 +9,7 @@
     label { display: block; margin-top: 10px; }
     input { padding: 5px; width: 200px; }
     button { margin-top: 15px; padding: 10px 20px; cursor: pointer; }
-    #result { margin-top: 20px; font-weight: bold; color: #006400; }
+    #result { margin-top: 20px; font-weight: bold; }
     .container { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
   </style>
 </head>
@@ -37,12 +37,13 @@
 
   <script>
     function hitungHargaWajar() {
+      const kode = document.getElementById('kode').value;
       const harga = parseFloat(document.getElementById('harga').value);
       const bvps = parseFloat(document.getElementById('bvps').value);
       const eps = parseFloat(document.getElementById('eps').value);
 
-      if (isNaN(harga) || isNaN(bvps) || isNaN(eps)) {
-        document.getElementById('result').innerText = "⚠️ Mohon isi semua data terlebih dahulu.";
+      if (!kode || isNaN(harga) || isNaN(bvps) || isNaN(eps)) {
+        alert("⚠️ Mohon isi semua data terlebih dahulu.");
         return;
       }
 
@@ -51,8 +52,24 @@
       const fairValuePBV = bvps * 2;   // asumsi PBV wajar = 2x
       const fairValue = (fairValuePER + fairValuePBV) / 2;
 
-      document.getElementById('result').innerText =
-        "Harga Wajar Saham: Rp " + fairValue.toFixed(0);
+      let status = "";
+      let warna = "gray";
+      if (harga < fairValue * 0.9) {
+        status = "📉 Saham sedang murah dibanding harga wajar.";
+        warna = "green";
+      } else if (harga > fairValue * 1.1) {
+        status = "📈 Saham sedang mahal dibanding harga wajar.";
+        warna = "red";
+      } else {
+        status = "⚖️ Saham berada di kisaran harga wajar.";
+        warna = "gray";
+      }
+
+      document.getElementById('result').innerHTML =
+        "<b>Kode Saham:</b> " + kode + "<br>" +
+        "<b>Harga Wajar:</b> Rp " + fairValue.toLocaleString() + "<br>" +
+        "<b>Harga Saat Ini:</b> Rp " + harga.toLocaleString() + "<br>" +
+        "<b>Status:</b> <span style='color:" + warna + "'>" + status + "</span>";
     }
 
     function resetForm() {
