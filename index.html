@@ -1,88 +1,88 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <title>Analisis Saham Sederhana</title>
-  <style>
-    body { font-family: Arial; margin: 20px; background: #f4f6f9; }
-    h1 { text-align: center; background: #007BFF; color: #fff; padding: 10px; border-radius: 8px; }
-    .card { background: #20c997; color: #fff; padding: 15px; border-radius: 8px; margin: 15px 0; }
-    .red { background: #dc3545; }
-    .score-bar { background: #ddd; border-radius: 10px; overflow: hidden; margin-top: 10px; }
-    .score-fill { height: 20px; background: #28a745; width: 0%; transition: width 0.5s; }
-  </style>
-</head>
-<body>
-  <h1>📊 Analisis Saham</h1>
+<script>
+  // daftar id input yang dipakai
+  const inputs = ['per','pbv','npm','bidVol','offerVol','buy','sell'];
 
-  <div class="card">
-    <h3>Fundamental</h3>
-    <label>PER: <input type="number" id="per"></label>
-    <label>PBV: <input type="number" id="pbv"></label>
-    <label>NPM (%): <input type="number" id="npm"></label>
-    <p id="fundamentalResult">Belum ada data</p>
-  </div>
+  // load saved values
+  function loadSaved() {
+    inputs.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const saved = localStorage.getItem('as_' + id);
+      if (saved !== null) el.value = saved;
+    });
+  }
 
-  <div class="card">
-    <h3>Bid & Offer</h3>
-    <label>Total Bid Volume: <input type="number" id="bidVol"></label>
-    <label>Total Offer Volume: <input type="number" id="offerVol"></label>
-    <p id="bidOfferResult">Belum ada data</p>
-  </div>
+  // simpan value ke localStorage
+  function saveValue(id, value) {
+    localStorage.setItem('as_' + id, value);
+  }
 
-  <div class="card">
-    <h3>Broker Summary</h3>
-    <label>Total Buy: <input type="number" id="buy"></label>
-    <label>Total Sell: <input type="number" id="sell"></label>
-    <p id="brokerResult">Belum ada data</p>
-  </div>
+  // fungsi hitung sederhana sesuai aturan tanpa rencana trading
+  function calculateAll() {
+    // Fundamental
+    const per = parseFloat(document.getElementById('per')?.value) || 0;
+    const pbv = parseFloat(document.getElementById('pbv')?.value) || 0;
+    const npm = parseFloat(document.getElementById('npm')?.value) || 0;
+    let fundamentalScore = 0;
+    if (per > 0 && per < 15) fundamentalScore += 10;
+    else if (per >= 15 && per <= 30) fundamentalScore += 7;
+    else if (per > 30) fundamentalScore += 5;
+    if (pbv > 0 && pbv < 1) fundamentalScore += 8;
+    else if (pbv >=1 && pbv <=2) fundamentalScore += 5;
+    else if (pbv > 2) fundamentalScore += 3;
+    if (npm > 10) fundamentalScore += 7;
+    else if (npm >=5 && npm <=10) fundamentalScore += 5;
+    else fundamentalScore += 0;
+    document.getElementById('fundamentalResult').innerText = `Skor Fundamental: ${fundamentalScore}/25`;
 
-  <div class="card red">
-    <h3>Kesimpulan</h3>
-    <div class="score-bar"><div id="scoreFill" class="score-fill"></div></div>
-    <p id="totalScore">TOTAL: 0/100</p>
-    <h2 id="finalResult">DATA TIDAK CUKUP</h2>
-  </div>
+    // Bid & Offer
+    const bidVol = parseFloat(document.getElementById('bidVol')?.value) || 0;
+    const offerVol = parseFloat(document.getElementById('offerVol')?.value) || 1;
+    const ratio = offerVol > 0 ? bidVol / offerVol : 0;
+    let bidScore = 0;
+    if (ratio > 1.5) bidScore = 10;
+    else if (ratio >= 1.0) bidScore = 7;
+    else if (ratio >= 0.8) bidScore = 5;
+    else bidScore = 2;
+    document.getElementById('bidOfferResult').innerText = `Rasio Bid/Offer: ${ratio.toFixed(2)} → Skor ${bidScore}/10`;
 
-  <button onclick="calculate()">Hitung Skor</button>
+    // Broker
+    const buy = parseFloat(document.getElementById('buy')?.value) || 0;
+    const sell = parseFloat(document.getElementById('sell')?.value) || 0;
+    const netBuy = buy - sell;
+    const brokerScore = netBuy > 0 ? 15 : 5;
+    document.getElementById('brokerResult').innerText = `Net Buy: ${netBuy} → Skor ${brokerScore}/15`;
 
-  <script>
-    function calculate() {
-      // Fundamental scoring
-      let per = parseFloat(document.getElementById("per").value) || 0;
-      let pbv = parseFloat(document.getElementById("pbv").value) || 0;
-      let npm = parseFloat(document.getElementById("npm").value) || 0;
-      let fundamentalScore = 0;
-      if (per > 0 && per < 15) fundamentalScore += 10; // PER rendah lebih baik
-      if (pbv > 0 && pbv < 2) fundamentalScore += 8;   // PBV rendah lebih baik
-      if (npm > 10) fundamentalScore += 7;             // NPM tinggi lebih baik
-      document.getElementById("fundamentalResult").innerText = "Skor Fundamental: " + fundamentalScore + "/25";
+    // Total dan kesimpulan
+    const totalScore = fundamentalScore + bidScore + brokerScore;
+    const maxScore = 25 + 10 + 15; // 50
+    const percent = Math.round((totalScore / maxScore) * 100);
+    document.getElementById('totalScore').innerText = `TOTAL: ${totalScore}/${maxScore} (${percent}%)`;
+    document.getElementById('scoreFill').style.width = percent + '%';
 
-      // Bid & Offer scoring
-      let bidVol = parseFloat(document.getElementById("bidVol").value) || 0;
-      let offerVol = parseFloat(document.getElementById("offerVol").value) || 1;
-      let ratio = bidVol / offerVol;
-      let bidScore = (ratio > 1.5) ? 10 : (ratio >= 1.0 ? 7 : (ratio >= 0.8 ? 5 : 2));
-      document.getElementById("bidOfferResult").innerText = "Rasio Bid/Offer: " + ratio.toFixed(2) + " → Skor " + bidScore + "/10";
+    let result = 'DATA TIDAK CUKUP';
+    if (totalScore >= 40) result = '🟢 LAYAK';
+    else if (totalScore >= 25) result = '🟡 TUNGGU';
+    else result = '🔴 HINDARI';
+    document.getElementById('finalResult').innerText = result;
+  }
 
-      // Broker scoring
-      let buy = parseFloat(document.getElementById("buy").value) || 0;
-      let sell = parseFloat(document.getElementById("sell").value) || 0;
-      let netBuy = buy - sell;
-      let brokerScore = (netBuy > 0) ? 15 : 5;
-      document.getElementById("brokerResult").innerText = "Net Buy: " + netBuy + " → Skor " + brokerScore + "/15";
+  // attach listeners
+  function attachListeners() {
+    inputs.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('input', (e) => {
+        saveValue(id, e.target.value);
+        calculateAll();
+      });
+    });
+  }
 
-      // Total
-      let totalScore = fundamentalScore + bidScore + brokerScore;
-      document.getElementById("totalScore").innerText = "TOTAL: " + totalScore + "/50";
-      document.getElementById("scoreFill").style.width = (totalScore/50*100) + "%";
-
-      let result = "DATA TIDAK CUKUP";
-      if (totalScore >= 40) result = "🟢 LAYAK";
-      else if (totalScore >= 30) result = "🟡 TUNGGU";
-      else result = "🔴 HINDARI";
-      document.getElementById("finalResult").innerText = result;
-    }
-  </script>
-</body>
-</html>
+  // init
+  window.addEventListener('DOMContentLoaded', () => {
+    loadSaved();
+    attachListeners();
+    calculateAll(); // hitung sekali saat load
+  });
+</script>
