@@ -2,148 +2,87 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Dashboard Analisis Saham</title>
+  <title>Analisis Saham Sederhana</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; background: #f4f6f9; }
-    h1 { text-align: center; color: #fff; background: #007BFF; padding: 15px; border-radius: 8px; }
-    .card { border-radius: 10px; padding: 20px; margin: 20px 0; color: #fff; }
-    .green { background: #20c997; }
-    .purple { background: #6f42c1; }
-    .blue { background: #17a2b8; }
-    .orange { background: #fd7e14; }
-    .pink { background: #e83e8c; }
-    .toska { background: #20c997; }
+    body { font-family: Arial; margin: 20px; background: #f4f6f9; }
+    h1 { text-align: center; background: #007BFF; color: #fff; padding: 10px; border-radius: 8px; }
+    .card { background: #20c997; color: #fff; padding: 15px; border-radius: 8px; margin: 15px 0; }
     .red { background: #dc3545; }
-    label { display: block; margin-top: 10px; }
-    input, textarea { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: none; }
-    button { margin-top: 15px; padding: 10px 20px; background: #007BFF; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
-    button:hover { background: #0056b3; }
     .score-bar { background: #ddd; border-radius: 10px; overflow: hidden; margin-top: 10px; }
     .score-fill { height: 20px; background: #28a745; width: 0%; transition: width 0.5s; }
   </style>
 </head>
 <body>
-  <h1>📊 ANALISIS SAHAM</h1>
+  <h1>📊 Analisis Saham</h1>
 
-  <!-- HEADER -->
-  <div class="card blue">
-    <label>TICKER: <input type="text" id="ticker"></label>
-    <label>Harga Terakhir: <input type="number" id="harga"></label>
-    <p>Tanggal Analisis: <span id="tanggal"></span></p>
-  </div>
-
-  <!-- FUNDAMENTAL -->
-  <div class="card green">
-    <h3>1. Fundamental</h3>
+  <div class="card">
+    <h3>Fundamental</h3>
     <label>PER: <input type="number" id="per"></label>
     <label>PBV: <input type="number" id="pbv"></label>
     <label>NPM (%): <input type="number" id="npm"></label>
-    <label>Rata-rata PER sektor: <input type="number" id="perSector"></label>
-    <label>Rata-rata PBV sektor: <input type="number" id="pbvSector"></label>
-    <label>Rata-rata NPM sektor: <input type="number" id="npmSector"></label>
-    <p id="fundamentalResult">Fundamental: Belum ada data</p>
+    <p id="fundamentalResult">Belum ada data</p>
   </div>
 
-  <!-- TEKNIKAL -->
-  <div class="card purple">
-    <h3>2. Grafik / Teknikal</h3>
-    <textarea id="teknikal" placeholder="Trend, Support, Resistance, Volume, RSI, Breakout, Entry"></textarea>
-    <p id="teknikalResult">Teknikal: Belum ada data</p>
-  </div>
-
-  <!-- BID & OFFER -->
-  <div class="card blue">
-    <h3>3. Bid & Offer</h3>
-    <label>Total Volume Bid: <input type="number" id="bidVol"></label>
-    <label>Total Volume Offer: <input type="number" id="offerVol"></label>
+  <div class="card">
+    <h3>Bid & Offer</h3>
+    <label>Total Bid Volume: <input type="number" id="bidVol"></label>
+    <label>Total Offer Volume: <input type="number" id="offerVol"></label>
     <p id="bidOfferResult">Belum ada data</p>
   </div>
 
-  <!-- BROKER SUMMARY -->
-  <div class="card orange">
-    <h3>4. Broker Summary</h3>
+  <div class="card">
+    <h3>Broker Summary</h3>
     <label>Total Buy: <input type="number" id="buy"></label>
     <label>Total Sell: <input type="number" id="sell"></label>
     <p id="brokerResult">Belum ada data</p>
   </div>
 
-  <!-- BERITA -->
-  <div class="card pink">
-    <h3>5. Berita Terbaru</h3>
-    <textarea id="berita" placeholder="Berita perusahaan, aksi korporasi, laporan keuangan, katalis"></textarea>
-    <p id="beritaResult">Belum ada data</p>
-  </div>
-
-  <!-- RENCANA TRADING -->
-  <div class="card toska">
-    <h3>📌 Rencana Trading</h3>
-    <label>Entry Ideal: <input type="number" id="entry"></label>
-    <label>Stop Loss: <input type="number" id="stoploss"></label>
-    <label>Target Profit 1: <input type="number" id="target1"></label>
-    <p id="rrResult">Risk/Reward: Belum ada data</p>
-  </div>
-
-  <!-- KESIMPULAN -->
   <div class="card red">
-    <h3>10. Kesimpulan</h3>
+    <h3>Kesimpulan</h3>
     <div class="score-bar"><div id="scoreFill" class="score-fill"></div></div>
     <p id="totalScore">TOTAL: 0/100</p>
     <h2 id="finalResult">DATA TIDAK CUKUP</h2>
-    <p id="reason">Alasan Singkat: Belum ada data</p>
   </div>
 
   <button onclick="calculate()">Hitung Skor</button>
 
   <script>
-    document.getElementById("tanggal").innerText = new Date().toLocaleDateString();
-
     function calculate() {
-      // Fundamental
-      let per = parseFloat(document.getElementById("per").value) || null;
-      let pbv = parseFloat(document.getElementById("pbv").value) || null;
-      let npm = parseFloat(document.getElementById("npm").value) || null;
-      let perSector = parseFloat(document.getElementById("perSector").value) || null;
-      let pbvSector = parseFloat(document.getElementById("pbvSector").value) || null;
-      let npmSector = parseFloat(document.getElementById("npmSector").value) || null;
-
+      // Fundamental scoring
+      let per = parseFloat(document.getElementById("per").value) || 0;
+      let pbv = parseFloat(document.getElementById("pbv").value) || 0;
+      let npm = parseFloat(document.getElementById("npm").value) || 0;
       let fundamentalScore = 0;
-      if (per && perSector) fundamentalScore += (per < perSector) ? 10 : (per > perSector*2 ? 5 : 7);
-      if (pbv && pbvSector) fundamentalScore += (pbv < pbvSector) ? 8 : 5;
-      if (npm && npmSector) fundamentalScore += (npm > npmSector) ? 7 : (npm < 0 ? 0 : 5);
+      if (per > 0 && per < 15) fundamentalScore += 10; // PER rendah lebih baik
+      if (pbv > 0 && pbv < 2) fundamentalScore += 8;   // PBV rendah lebih baik
+      if (npm > 10) fundamentalScore += 7;             // NPM tinggi lebih baik
+      document.getElementById("fundamentalResult").innerText = "Skor Fundamental: " + fundamentalScore + "/25";
 
-      let fundamentalText = "KURANG";
-      if (fundamentalScore > 20) fundamentalText = "BAGUS";
-      else if (fundamentalScore > 10) fundamentalText = "CUKUP";
-      document.getElementById("fundamentalResult").innerText = "Fundamental: " + fundamentalText;
-
-      // Teknikal (contoh sederhana)
-      let teknikalScore = 20; // default
-      document.getElementById("teknikalResult").innerText = "Teknikal: skor " + teknikalScore;
-
-      // Bid & Offer
+      // Bid & Offer scoring
       let bidVol = parseFloat(document.getElementById("bidVol").value) || 0;
-      let offerVol = parseFloat(document.getElementById("offerVol").value) || 0;
-      let ratio = (offerVol>0)? bidVol/offerVol : 0;
-      let bidScore = 0;
-      if (ratio > 1.5) bidScore = 10;
-      else if (ratio >= 1.0) bidScore = 7;
-      else if (ratio >= 0.8) bidScore = 5;
-      else bidScore = 2;
-      document.getElementById("bidOfferResult").innerText = "Bid/Offer Ratio: " + ratio.toFixed(2);
+      let offerVol = parseFloat(document.getElementById("offerVol").value) || 1;
+      let ratio = bidVol / offerVol;
+      let bidScore = (ratio > 1.5) ? 10 : (ratio >= 1.0 ? 7 : (ratio >= 0.8 ? 5 : 2));
+      document.getElementById("bidOfferResult").innerText = "Rasio Bid/Offer: " + ratio.toFixed(2) + " → Skor " + bidScore + "/10";
 
-      // Broker
+      // Broker scoring
       let buy = parseFloat(document.getElementById("buy").value) || 0;
       let sell = parseFloat(document.getElementById("sell").value) || 0;
       let netBuy = buy - sell;
       let brokerScore = (netBuy > 0) ? 15 : 5;
-      document.getElementById("brokerResult").innerText = "Net Buy: " + netBuy;
+      document.getElementById("brokerResult").innerText = "Net Buy: " + netBuy + " → Skor " + brokerScore + "/15";
 
-      // Berita
-      let berita = document.getElementById("berita").value;
-      let beritaScore = 10;
-      if (berita.includes("positif")) beritaScore = 15;
-      else if (berita.includes("negatif")) beritaScore = 5;
-      document.getElementById("beritaResult").innerText = "Berita: skor " + beritaScore;
+      // Total
+      let totalScore = fundamentalScore + bidScore + brokerScore;
+      document.getElementById("totalScore").innerText = "TOTAL: " + totalScore + "/50";
+      document.getElementById("scoreFill").style.width = (totalScore/50*100) + "%";
 
-      // Risk Reward
-      let
+      let result = "DATA TIDAK CUKUP";
+      if (totalScore >= 40) result = "🟢 LAYAK";
+      else if (totalScore >= 30) result = "🟡 TUNGGU";
+      else result = "🔴 HINDARI";
+      document.getElementById("finalResult").innerText = result;
+    }
+  </script>
+</body>
+</html>
