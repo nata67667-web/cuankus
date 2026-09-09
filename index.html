@@ -2,109 +2,157 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Analisis Saham Swing Trading</title>
+  <title>Dashboard Analisis Saham</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 40px; background: #f9f9f9; }
-    h2 { text-align: center; color: #333; }
-    .box { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f4f6f9; }
+    h1 { text-align: center; color: #fff; background: #007BFF; padding: 15px; border-radius: 8px; }
+    .card { border-radius: 10px; padding: 20px; margin: 20px 0; color: #fff; }
+    .green { background: #20c997; }
+    .purple { background: #6f42c1; }
+    .blue { background: #17a2b8; }
+    .orange { background: #fd7e14; }
+    .pink { background: #e83e8c; }
+    .toska { background: #20c997; }
+    .red { background: #dc3545; }
     label { display: block; margin-top: 10px; }
-    input, textarea { width: 100%; padding: 8px; margin-top: 5px; }
-    button { margin-top: 15px; padding: 10px 20px; background: #006400; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
-    button:hover { background: #008000; }
-    .result { margin-top: 20px; font-weight: bold; color: #006400; }
-    img { max-width: 100%; margin-top: 10px; border-radius: 6px; }
+    input, textarea { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: none; }
+    button { margin-top: 15px; padding: 10px 20px; background: #007BFF; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #0056b3; }
+    .score-bar { background: #ddd; border-radius: 10px; overflow: hidden; margin-top: 10px; }
+    .score-fill { height: 20px; background: #28a745; width: 0%; transition: width 0.5s; }
   </style>
 </head>
 <body>
-  <h2>📊 Analisis Saham Swing Trading</h2>
+  <h1>📊 ANALISIS SAHAM</h1>
 
-  <div class="box">
+  <!-- HEADER -->
+  <div class="card blue">
+    <label>TICKER: <input type="text" id="ticker"></label>
+    <label>Harga Terakhir: <input type="number" id="harga"></label>
+    <p>Tanggal Analisis: <span id="tanggal"></span></p>
+  </div>
+
+  <!-- FUNDAMENTAL -->
+  <div class="card green">
     <h3>1. Fundamental</h3>
     <label>PER: <input type="number" id="per"></label>
     <label>PBV: <input type="number" id="pbv"></label>
     <label>NPM (%): <input type="number" id="npm"></label>
-    <label>Kondisi Fundamental Singkat: <input type="text" id="fundamental"></label>
+    <label>Rata-rata PER sektor: <input type="number" id="perSector"></label>
+    <label>Rata-rata PBV sektor: <input type="number" id="pbvSector"></label>
+    <label>Rata-rata NPM sektor: <input type="number" id="npmSector"></label>
+    <p id="fundamentalResult">Fundamental: Belum ada data</p>
   </div>
 
-  <div class="box">
+  <!-- TEKNIKAL -->
+  <div class="card purple">
     <h3>2. Grafik / Teknikal</h3>
     <input type="file" id="chart" accept="image/*">
     <div id="chartPreview"></div>
+    <textarea id="teknikal" placeholder="Trend, Support, Resistance, Volume, RSI, Breakout, Entry"></textarea>
   </div>
 
-  <div class="box">
+  <!-- BID & OFFER -->
+  <div class="card blue">
     <h3>3. Bid & Offer</h3>
-    <input type="file" id="bidOffer" accept="image/*">
-    <div id="bidOfferPreview"></div>
+    <textarea id="bidoffer" placeholder="Masukkan data Bid & Offer"></textarea>
+    <p id="bidOfferResult">Belum ada data</p>
   </div>
 
-  <div class="box">
+  <!-- BROKER SUMMARY -->
+  <div class="card orange">
     <h3>4. Broker Summary</h3>
-    <input type="file" id="brokerImg" accept="image/*">
-    <div id="brokerPreview"></div>
+    <textarea id="broker" placeholder="Masukkan data broker summary"></textarea>
+    <p id="brokerResult">Belum ada data</p>
   </div>
 
-  <div class="box">
+  <!-- BERITA -->
+  <div class="card pink">
     <h3>5. Berita Terbaru</h3>
-    <textarea id="berita" placeholder="Laporan keuangan, aksi korporasi, katalis, sentimen sektor"></textarea>
+    <textarea id="berita" placeholder="Berita perusahaan, aksi korporasi, laporan keuangan, katalis"></textarea>
+    <p id="beritaResult">Belum ada data</p>
   </div>
 
-  <div class="box">
+  <!-- RENCANA TRADING -->
+  <div class="card toska">
     <h3>📌 Rencana Trading</h3>
-    <label>Entry Ideal: <input type="text" id="entry"></label>
-    <label>Stop Loss: <input type="text" id="stoploss"></label>
-    <label>Target Profit: <input type="text" id="target"></label>
-    <label>Risk/Reward: <input type="text" id="rr"></label>
-    <label>Skor Swing Trading (0–100): <input type="number" id="skor"></label>
-    <label>Kesimpulan (LAYAK/TUNGGU/HINDARI): <input type="text" id="kesimpulan"></label>
-    <button onclick="generate()">Tampilkan Hasil</button>
-    <div id="output" class="result"></div>
+    <label>Entry Ideal: <input type="number" id="entry"></label>
+    <label>Stop Loss: <input type="number" id="stoploss"></label>
+    <label>Target Profit 1: <input type="number" id="target1"></label>
+    <label>Target Profit 2: <input type="number" id="target2"></label>
+    <p id="rrResult">Risk/Reward: Belum ada data</p>
   </div>
+
+  <!-- KESIMPULAN -->
+  <div class="card red">
+    <h3>10. Kesimpulan</h3>
+    <div class="score-bar"><div id="scoreFill" class="score-fill"></div></div>
+    <p id="totalScore">TOTAL: 0/100</p>
+    <h2 id="finalResult">DATA TIDAK CUKUP</h2>
+    <p id="reason">Alasan Singkat: Belum ada data</p>
+  </div>
+
+  <button onclick="calculate()">Hitung Skor</button>
 
   <script>
-    function previewImage(input, previewId) {
-      const file = input.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" alt="Preview">`;
-        }
-        reader.readAsDataURL(file);
+    document.getElementById("tanggal").innerText = new Date().toLocaleDateString();
+
+    function calculate() {
+      let per = parseFloat(document.getElementById("per").value) || null;
+      let pbv = parseFloat(document.getElementById("pbv").value) || null;
+      let npm = parseFloat(document.getElementById("npm").value) || null;
+      let perSector = parseFloat(document.getElementById("perSector").value) || null;
+      let pbvSector = parseFloat(document.getElementById("pbvSector").value) || null;
+      let npmSector = parseFloat(document.getElementById("npmSector").value) || null;
+
+      let fundamentalScore = 0;
+      let fundamentalText = "Belum ada data";
+
+      if (per && perSector) {
+        if (per < perSector) fundamentalScore += 10;
+        else if (per > perSector * 2) fundamentalScore += 5;
+        else fundamentalScore += 7;
       }
-    }
+      if (pbv && pbvSector) {
+        if (pbv < pbvSector) fundamentalScore += 8;
+        else fundamentalScore += 5;
+      }
+      if (npm && npmSector) {
+        if (npm > npmSector) fundamentalScore += 7;
+        else if (npm < 0) fundamentalScore += 0;
+        else fundamentalScore += 5;
+      }
 
-    document.getElementById("chart").addEventListener("change", function() {
-      previewImage(this, "chartPreview");
-    });
-    document.getElementById("bidOffer").addEventListener("change", function() {
-      previewImage(this, "bidOfferPreview");
-    });
-    document.getElementById("brokerImg").addEventListener("change", function() {
-      previewImage(this, "brokerPreview");
-    });
+      if (fundamentalScore > 20) fundamentalText = "BAGUS";
+      else if (fundamentalScore > 10) fundamentalText = "CUKUP";
+      else fundamentalText = "KURANG";
 
-    function generate() {
-      const per = document.getElementById("per").value;
-      const pbv = document.getElementById("pbv").value;
-      const npm = document.getElementById("npm").value;
-      const fundamental = document.getElementById("fundamental").value;
-      const berita = document.getElementById("berita").value;
-      const entry = document.getElementById("entry").value;
-      const stoploss = document.getElementById("stoploss").value;
-      const target = document.getElementById("target").value;
-      const rr = document.getElementById("rr").value;
-      const skor = document.getElementById("skor").value;
-      const kesimpulan = document.getElementById("kesimpulan").value;
+      document.getElementById("fundamentalResult").innerText = "Fundamental: " + fundamentalText;
 
-      document.getElementById("output").innerHTML = `
-        <h3>📌 HASIL AKHIR</h3>
-        <p>PER: ${per}, PBV: ${pbv}, NPM: ${npm}% → ${fundamental}</p>
-        <p>Berita Terbaru: ${berita}</p>
-        <p>Entry Ideal: ${entry} | Stop Loss: ${stoploss} | Target Profit: ${target}</p>
-        <p>Risk/Reward: ${rr} | Skor: ${skor}/100</p>
-        <h3>Kesimpulan: ${kesimpulan}</h3>
-      `;
-    }
-  </script>
-</body>
-</html>
+      // Risk Reward
+      let entry = parseFloat(document.getElementById("entry").value) || null;
+      let stoploss = parseFloat(document.getElementById("stoploss").value) || null;
+      let target1 = parseFloat(document.getElementById("target1").value) || null;
+
+      let rrText = "Belum ada data";
+      if (entry && stoploss && target1) {
+        let risk = entry - stoploss;
+        let reward = target1 - entry;
+        let rr = (reward / risk).toFixed(2);
+        rrText = `Risk = ${risk}, Reward = ${reward}, RR = ${rr}`;
+        if (rr < 1.5) rrText += " ⚠️ Warning: Risk/Reward < 1.5";
+      }
+      document.getElementById("rrResult").innerText = rrText;
+
+      // Total Score (contoh sederhana)
+      let totalScore = fundamentalScore + 30; // tambahkan logika teknikal, bid/offer, broker, berita
+      document.getElementById("totalScore").innerText = "TOTAL: " + totalScore + "/100";
+      document.getElementById("scoreFill").style.width = totalScore + "%";
+
+      let result = "DATA TIDAK CUKUP";
+      if (totalScore >= 80) result = "🟢 LAYAK";
+      else if (totalScore >= 60) result = "🟡 TUNGGU";
+      else result = "🔴 HINDARI";
+
+      document.getElementById("finalResult").innerText = result;
+      document.getElementById("reason").innerText =
