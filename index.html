@@ -2,84 +2,90 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Kalkulator Harga Wajar Saham</title>
+  <title>Analisis Saham Swing Trading</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 40px; background: #f9f9f9; }
-    h2 { color: #333; }
+    h2 { text-align: center; color: #333; }
+    .box { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
     label { display: block; margin-top: 10px; }
-    input { padding: 5px; width: 200px; }
-    button { margin-top: 15px; padding: 10px 20px; cursor: pointer; }
-    #result { margin-top: 20px; font-weight: bold; }
-    .container { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    input, textarea { width: 100%; padding: 8px; margin-top: 5px; }
+    button { margin-top: 15px; padding: 10px 20px; background: #006400; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #008000; }
+    .result { margin-top: 20px; font-weight: bold; color: #006400; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Kalkulator Harga Wajar Saham</h2>
-    
-    <label>Kode Saham:</label>
-    <input type="text" id="kode" placeholder="Contoh: MYOR">
+  <h2>📊 Analisis Saham Swing Trading</h2>
 
-    <label>Harga Saham Saat Ini (Rp):</label>
-    <input type="number" id="harga">
+  <div class="box">
+    <h3>1. Fundamental</h3>
+    <label>PER: <input type="number" id="per"></label>
+    <label>PBV: <input type="number" id="pbv"></label>
+    <label>NPM (%): <input type="number" id="npm"></label>
+    <label>Kondisi Fundamental Singkat: <input type="text" id="fundamental"></label>
+  </div>
 
-    <label>Book Value Per Share (BVPS) (Rp):</label>
-    <input type="number" id="bvps">
+  <div class="box">
+    <h3>2. Grafik / Teknikal</h3>
+    <textarea id="teknikal" placeholder="Trend, Support, Resistance, Volume, RSI, Breakout, Entry"></textarea>
+  </div>
 
-    <label>Earnings Per Share (EPS TTM) (Rp):</label>
-    <input type="number" id="eps">
+  <div class="box">
+    <h3>3. Bid & Offer</h3>
+    <textarea id="bidoffer" placeholder="Tekanan beli/jual, Bid kuat/Offer kuat, Indikasi buyer"></textarea>
+  </div>
 
-    <button onclick="hitungHargaWajar()">Hitung Harga Wajar</button>
-    <button onclick="resetForm()">Reset</button>
+  <div class="box">
+    <h3>4. Broker Summary</h3>
+    <textarea id="broker" placeholder="Akumulasi/Distribusi, Broker dominan, Indikasi institusi"></textarea>
+  </div>
 
-    <div id="result"></div>
+  <div class="box">
+    <h3>5. Berita Terbaru</h3>
+    <textarea id="berita" placeholder="Laporan keuangan, aksi korporasi, katalis, sentimen sektor"></textarea>
+  </div>
+
+  <div class="box">
+    <h3>📌 Rencana Trading</h3>
+    <label>Entry Ideal: <input type="text" id="entry"></label>
+    <label>Stop Loss: <input type="text" id="stoploss"></label>
+    <label>Target Profit: <input type="text" id="target"></label>
+    <label>Risk/Reward: <input type="text" id="rr"></label>
+    <label>Skor Swing Trading (0–100): <input type="number" id="skor"></label>
+    <label>Kesimpulan (LAYAK/TUNGGU/HINDARI): <input type="text" id="kesimpulan"></label>
+    <button onclick="generate()">Tampilkan Hasil</button>
+    <div id="output" class="result"></div>
   </div>
 
   <script>
-    function hitungHargaWajar() {
-      const kode = document.getElementById('kode').value;
-      const harga = parseFloat(document.getElementById('harga').value);
-      const bvps = parseFloat(document.getElementById('bvps').value);
-      const eps = parseFloat(document.getElementById('eps').value);
+    function generate() {
+      const per = document.getElementById("per").value;
+      const pbv = document.getElementById("pbv").value;
+      const npm = document.getElementById("npm").value;
+      const fundamental = document.getElementById("fundamental").value;
+      const teknikal = document.getElementById("teknikal").value;
+      const bidoffer = document.getElementById("bidoffer").value;
+      const broker = document.getElementById("broker").value;
+      const berita = document.getElementById("berita").value;
+      const entry = document.getElementById("entry").value;
+      const stoploss = document.getElementById("stoploss").value;
+      const target = document.getElementById("target").value;
+      const rr = document.getElementById("rr").value;
+      const skor = document.getElementById("skor").value;
+      const kesimpulan = document.getElementById("kesimpulan").value;
 
-      if (!kode || isNaN(harga) || isNaN(bvps) || isNaN(eps)) {
-        alert("⚠️ Mohon isi semua data terlebih dahulu.");
-        return;
-      }
-
-      // Metode sederhana: kombinasi PER & PBV
-      const fairValuePER = eps * 15;   // asumsi PER wajar = 15x
-      const fairValuePBV = bvps * 2;   // asumsi PBV wajar = 2x
-      const fairValue = (fairValuePER + fairValuePBV) / 2;
-
-      let status = "";
-      let warna = "gray";
-      if (harga < fairValue * 0.9) {
-        status = "📉 Saham sedang murah dibanding harga wajar.";
-        warna = "green";
-      } else if (harga > fairValue * 1.1) {
-        status = "📈 Saham sedang mahal dibanding harga wajar.";
-        warna = "red";
-      } else {
-        status = "⚖️ Saham berada di kisaran harga wajar.";
-        warna = "gray";
-      }
-
-      document.getElementById('result').innerHTML =
-        "<b>Kode Saham:</b> " + kode + "<br>" +
-        "<b>Harga Wajar:</b> Rp " + fairValue.toLocaleString() + "<br>" +
-        "<b>Harga Saat Ini:</b> Rp " + harga.toLocaleString() + "<br>" +
-        "<b>Status:</b> <span style='color:" + warna + "'>" + status + "</span>";
-    }
-
-    function resetForm() {
-      document.getElementById('kode').value = "";
-      document.getElementById('harga').value = "";
-      document.getElementById('bvps').value = "";
-      document.getElementById('eps').value = "";
-      document.getElementById('result').innerText = "";
+      document.getElementById("output").innerHTML = `
+        <h3>📌 HASIL AKHIR</h3>
+        <p>PER: ${per}, PBV: ${pbv}, NPM: ${npm}% → ${fundamental}</p>
+        <p>Teknikal: ${teknikal}</p>
+        <p>Bid & Offer: ${bidoffer}</p>
+        <p>Broker Summary: ${broker}</p>
+        <p>Berita Terbaru: ${berita}</p>
+        <p>Entry Ideal: ${entry} | Stop Loss: ${stoploss} | Target Profit: ${target}</p>
+        <p>Risk/Reward: ${rr} | Skor: ${skor}/100</p>
+        <h3>Kesimpulan: ${kesimpulan}</h3>
+      `;
     }
   </script>
 </body>
 </html>
-
