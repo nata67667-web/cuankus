@@ -12,6 +12,7 @@
     button { margin-top: 15px; padding: 10px 20px; background: #006400; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
     button:hover { background: #008000; }
     .result { margin-top: 20px; font-weight: bold; color: #006400; }
+    img { max-width: 100%; margin-top: 10px; border-radius: 6px; }
   </style>
 </head>
 <body>
@@ -27,17 +28,20 @@
 
   <div class="box">
     <h3>2. Grafik / Teknikal</h3>
-    <textarea id="teknikal" placeholder="Trend, Support, Resistance, Volume, RSI, Breakout, Entry"></textarea>
+    <input type="file" id="chart" accept="image/*">
+    <div id="chartPreview"></div>
   </div>
 
   <div class="box">
     <h3>3. Bid & Offer</h3>
-    <textarea id="bidoffer" placeholder="Tekanan beli/jual, Bid kuat/Offer kuat, Indikasi buyer"></textarea>
+    <input type="file" id="bidOffer" accept="image/*">
+    <div id="bidOfferPreview"></div>
   </div>
 
   <div class="box">
     <h3>4. Broker Summary</h3>
-    <textarea id="broker" placeholder="Akumulasi/Distribusi, Broker dominan, Indikasi institusi"></textarea>
+    <input type="file" id="brokerImg" accept="image/*">
+    <div id="brokerPreview"></div>
   </div>
 
   <div class="box">
@@ -58,14 +62,32 @@
   </div>
 
   <script>
+    function previewImage(input, previewId) {
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    document.getElementById("chart").addEventListener("change", function() {
+      previewImage(this, "chartPreview");
+    });
+    document.getElementById("bidOffer").addEventListener("change", function() {
+      previewImage(this, "bidOfferPreview");
+    });
+    document.getElementById("brokerImg").addEventListener("change", function() {
+      previewImage(this, "brokerPreview");
+    });
+
     function generate() {
       const per = document.getElementById("per").value;
       const pbv = document.getElementById("pbv").value;
       const npm = document.getElementById("npm").value;
       const fundamental = document.getElementById("fundamental").value;
-      const teknikal = document.getElementById("teknikal").value;
-      const bidoffer = document.getElementById("bidoffer").value;
-      const broker = document.getElementById("broker").value;
       const berita = document.getElementById("berita").value;
       const entry = document.getElementById("entry").value;
       const stoploss = document.getElementById("stoploss").value;
@@ -77,9 +99,6 @@
       document.getElementById("output").innerHTML = `
         <h3>📌 HASIL AKHIR</h3>
         <p>PER: ${per}, PBV: ${pbv}, NPM: ${npm}% → ${fundamental}</p>
-        <p>Teknikal: ${teknikal}</p>
-        <p>Bid & Offer: ${bidoffer}</p>
-        <p>Broker Summary: ${broker}</p>
         <p>Berita Terbaru: ${berita}</p>
         <p>Entry Ideal: ${entry} | Stop Loss: ${stoploss} | Target Profit: ${target}</p>
         <p>Risk/Reward: ${rr} | Skor: ${skor}/100</p>
