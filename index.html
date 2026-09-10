@@ -3,638 +3,495 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BursaAI — Analisis Pasar Bertenaga AI</title>
+<title>Cek Harga Wajar Saham</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #0b1220;
-    --bg-deep: #080d17;
-    --surface: #121b2d;
-    --surface-2: #182338;
-    --line: #253451;
-    --text: #e9edf5;
-    --text-dim: #90a0bd;
-    --text-faint: #5c6b8a;
-    --gold: #e8a33d;
-    --gold-soft: #3a2c15;
-    --up: #34d399;
-    --up-bg: #12291f;
-    --down: #f2596b;
-    --down-bg: #2c141b;
-    --radius-s: 6px;
-    --radius-m: 10px;
-  }
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--text);
-    font-family:'Inter',sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
-  h1,h2,h3{
-    font-family:'Fraunces',serif;
-    font-weight:600;
-    margin:0;
-    letter-spacing:-0.01em;
-  }
-  .mono{ font-family:'IBM Plex Mono',monospace; }
-  a{color:inherit;text-decoration:none;}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
-  ::selection{background:var(--gold);color:#141414;}
-
-  /* ---------- Top utility bar ---------- */
-  .util-bar{
-    background:var(--bg-deep);
-    border-bottom:1px solid var(--line);
-    font-size:12.5px;
-    color:var(--text-faint);
-    overflow:hidden;
-    white-space:nowrap;
-  }
-  .ticker-track{
-    display:inline-flex;
-    padding:8px 0;
-    animation:scroll-left 38s linear infinite;
-  }
-  .ticker-track span{
-    padding:0 22px;
-    border-right:1px solid var(--line);
-    font-family:'IBM Plex Mono',monospace;
-  }
-  .ticker-track .t-up{color:var(--up);}
-  .ticker-track .t-down{color:var(--down);}
-  @keyframes scroll-left{
-    from{transform:translateX(0);}
-    to{transform:translateX(-50%);}
+    --bg: #0A0F1C;
+    --bg-alt: #0D1424;
+    --panel: #131B2E;
+    --panel-border: #232D45;
+    --ink: #E9EDF7;
+    --ink-dim: #7C87A3;
+    --ink-faint: #4E5877;
+    --gold: #E0A62E;
+    --gold-dim: #8A6B24;
+    --up: #34C98E;
+    --down: #E85B6B;
+    --line: rgba(255,255,255,0.06);
   }
 
-  /* ---------- Header / nav ---------- */
-  header.site{
-    position:sticky; top:0; z-index:40;
-    background:rgba(11,18,32,0.92);
-    backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--line);
-  }
-  .nav-row{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:16px 0;
-  }
-  .logo{
-    display:flex;align-items:center;gap:10px;
-    font-family:'Fraunces',serif;font-size:21px;font-weight:600;
-  }
-  .logo .dot{
-    width:9px;height:9px;border-radius:50%;
-    background:var(--gold);
-    box-shadow:0 0 0 4px var(--gold-soft);
-  }
-  nav.main-links{display:flex;gap:30px;font-size:14.5px;color:var(--text-dim);}
-  nav.main-links a:hover{color:var(--text);}
-  .nav-actions{display:flex;align-items:center;gap:14px;}
-  .btn{
-    padding:9px 18px;border-radius:999px;font-size:14px;font-weight:500;
-    border:1px solid var(--line);cursor:pointer;
-  }
-  .btn-ghost{background:transparent;color:var(--text-dim);}
-  .btn-ghost:hover{color:var(--text);border-color:#3a4a6b;}
-  .btn-gold{background:var(--gold);color:#151005;border:none;font-weight:600;}
-  .btn-gold:hover{background:#f2ad46;}
+  * { box-sizing: border-box; }
 
-  /* ---------- Hero ---------- */
-  .hero{
-    padding:64px 0 56px;
-    border-bottom:1px solid var(--line);
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Space Grotesk', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100vh;
     background:
-      radial-gradient(600px 300px at 85% -10%, rgba(232,163,61,0.10), transparent);
-  }
-  .hero-grid{
-    display:grid;
-    grid-template-columns:1.05fr 0.95fr;
-    gap:56px;
-    align-items:center;
-  }
-  .eyebrow-note{
-    display:inline-flex;align-items:center;gap:8px;
-    font-size:13px;color:var(--gold);
-    background:var(--gold-soft);
-    border:1px solid rgba(232,163,61,0.35);
-    padding:6px 12px;border-radius:999px;
-    margin-bottom:20px;
-  }
-  .hero h1{
-    font-size:clamp(34px,4.4vw,52px);
-    line-height:1.08;
-    max-width:12ch;
-  }
-  .hero h1 em{
-    font-style:italic;
-    color:var(--gold);
-  }
-  .hero p.lede{
-    color:var(--text-dim);
-    font-size:17px;
-    line-height:1.6;
-    max-width:46ch;
-    margin:22px 0 30px;
-  }
-  .hero-cta{display:flex;gap:14px;align-items:center;}
-  .hero-note{margin-top:26px;font-size:13px;color:var(--text-faint);}
-
-  .hero-panel{
-    background:linear-gradient(180deg,var(--surface),var(--surface-2));
-    border:1px solid var(--line);
-    border-radius:16px;
-    padding:22px;
-  }
-  .hero-panel-top{
-    display:flex;justify-content:space-between;align-items:flex-start;
-    margin-bottom:14px;
-  }
-  .hp-label{font-size:12.5px;color:var(--text-faint);}
-  .hp-name{font-size:16px;font-weight:600;margin-top:3px;}
-  .hp-price{font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;}
-  .hp-delta{font-family:'IBM Plex Mono',monospace;font-size:13px;margin-top:4px;}
-  .ai-callout{
-    margin-top:16px;
-    border-top:1px dashed var(--line);
-    padding-top:16px;
-    display:flex;gap:12px;
-  }
-  .ai-icon{
-    flex:0 0 auto;width:30px;height:30px;border-radius:8px;
-    background:var(--gold-soft);border:1px solid rgba(232,163,61,0.35);
-    display:flex;align-items:center;justify-content:center;color:var(--gold);
-    font-family:'Fraunces',serif;font-weight:600;font-size:14px;
-  }
-  .ai-callout p{margin:0;font-size:13.5px;color:var(--text-dim);line-height:1.55;}
-  .ai-callout strong{color:var(--text);}
-
-  /* ---------- Section shell ---------- */
-  section{padding:56px 0;}
-  section + section{border-top:1px solid var(--line);}
-  .section-head{
-    display:flex;justify-content:space-between;align-items:flex-end;
-    margin-bottom:28px;gap:20px;flex-wrap:wrap;
-  }
-  .section-head h2{font-size:26px;}
-  .section-head p{color:var(--text-dim);font-size:14.5px;margin-top:6px;max-width:50ch;}
-  .see-all{font-size:13.5px;color:var(--gold);white-space:nowrap;}
-
-  /* ---------- Index strip ---------- */
-  .index-strip{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:1px;
-    background:var(--line);
-    border:1px solid var(--line);
-    border-radius:12px;
-    overflow:hidden;
-  }
-  .idx-card{background:var(--surface);padding:20px 22px;}
-  .idx-card .nm{font-size:13.5px;color:var(--text-dim);}
-  .idx-card .val{font-family:'IBM Plex Mono',monospace;font-size:21px;font-weight:600;margin:8px 0 4px;}
-  .idx-card .chg{font-family:'IBM Plex Mono',monospace;font-size:13px;}
-  .idx-card svg{margin-top:10px;display:block;}
-
-  /* ---------- Watchlist table ---------- */
-  .table-card{
-    background:var(--surface);
-    border:1px solid var(--line);
-    border-radius:12px;
-    overflow:hidden;
-  }
-  table{width:100%;border-collapse:collapse;}
-  thead tr{border-bottom:1px solid var(--line);}
-  th{
-    text-align:left;font-size:12px;text-transform:none;
-    color:var(--text-faint);font-weight:500;padding:14px 20px;
-  }
-  th.num, td.num{text-align:right;}
-  tbody tr{border-bottom:1px solid var(--line);}
-  tbody tr:last-child{border-bottom:none;}
-  tbody tr:hover{background:var(--surface-2);}
-  td{padding:15px 20px;font-size:14.5px;}
-  td.num, td .p-val{font-family:'IBM Plex Mono',monospace;}
-  .stock-name{font-weight:600;}
-  .stock-sub{color:var(--text-faint);font-size:12.5px;margin-top:2px;}
-  .badge-up{color:var(--up);background:var(--up-bg);padding:3px 8px;border-radius:5px;font-size:12.5px;}
-  .badge-down{color:var(--down);background:var(--down-bg);padding:3px 8px;border-radius:5px;font-size:12.5px;}
-  .tag{
-    font-size:11px;padding:3px 8px;border-radius:5px;
-    border:1px solid var(--line);color:var(--text-dim);
-  }
-  .tag.buy{color:var(--up);border-color:rgba(52,211,153,0.35);}
-  .tag.hold{color:var(--gold);border-color:rgba(232,163,61,0.35);}
-  .tag.sell{color:var(--down);border-color:rgba(242,89,107,0.35);}
-
-  /* ---------- AI insight cards ---------- */
-  .insight-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:18px;
-  }
-  .insight-card{
-    background:var(--surface);
-    border:1px solid var(--line);
-    border-radius:12px;
-    padding:22px;
-    display:flex;flex-direction:column;
-    gap:14px;
-  }
-  .insight-top{display:flex;justify-content:space-between;align-items:center;}
-  .insight-top .stock{font-weight:600;font-size:15px;}
-  .conf-ring{
-    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold);
-    border:1px solid rgba(232,163,61,0.35);
-    padding:3px 9px;border-radius:999px;
-  }
-  .insight-card p{margin:0;font-size:13.8px;line-height:1.6;color:var(--text-dim);}
-  .insight-foot{
-    margin-top:auto;padding-top:14px;border-top:1px dashed var(--line);
-    display:flex;justify-content:space-between;font-size:12.5px;color:var(--text-faint);
+      radial-gradient(1200px 500px at 50% -10%, rgba(224,166,46,0.08), transparent 60%),
+      var(--bg);
+    display: flex;
+    justify-content: center;
+    padding: 56px 20px 80px;
   }
 
-  /* ---------- Two column: chart + news ---------- */
-  .split{
-    display:grid;grid-template-columns:1.4fr 1fr;gap:24px;
-  }
-  .chart-card{
-    background:var(--surface);border:1px solid var(--line);
-    border-radius:12px;padding:24px;
-  }
-  .chart-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
-  .chart-head .cname{font-size:18px;font-weight:600;}
-  .chart-head .cprice{font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;margin-top:4px;}
-  .range-tabs{display:flex;gap:6px;}
-  .range-tabs button{
-    background:transparent;border:1px solid var(--line);color:var(--text-dim);
-    font-size:12px;padding:5px 10px;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;
-  }
-  .range-tabs button.active{background:var(--gold-soft);color:var(--gold);border-color:rgba(232,163,61,0.4);}
-
-  .news-list{display:flex;flex-direction:column;}
-  .news-item{
-    padding:16px 0;border-bottom:1px solid var(--line);
-    display:flex;flex-direction:column;gap:6px;
-  }
-  .news-item:first-child{padding-top:0;}
-  .news-item:last-child{border-bottom:none;padding-bottom:0;}
-  .news-item .src{font-size:12px;color:var(--text-faint);}
-  .news-item .headline{font-size:14.5px;line-height:1.45;font-weight:500;}
-  .news-item .headline:hover{color:var(--gold);}
-
-  /* ---------- CTA band ---------- */
-  .cta-band{
-    background:linear-gradient(135deg,#151f36,#0f1626);
-    border:1px solid var(--line);
-    border-radius:16px;
-    padding:44px;
-    display:flex;justify-content:space-between;align-items:center;
-    gap:30px;
-  }
-  .cta-band h2{font-size:26px;max-width:16ch;}
-  .cta-band p{color:var(--text-dim);font-size:14.5px;margin-top:10px;max-width:38ch;}
-
-  /* ---------- Footer ---------- */
-  footer{
-    border-top:1px solid var(--line);
-    padding:40px 0 30px;
-    color:var(--text-faint);
-    font-size:13px;
-  }
-  .foot-grid{display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;}
-  .foot-links{display:flex;gap:26px;flex-wrap:wrap;}
-  .foot-links a:hover{color:var(--text-dim);}
-  .disclaimer{
-    margin-top:26px;padding-top:20px;border-top:1px solid var(--line);
-    font-size:12px;line-height:1.6;color:#4a577a;
+  .wrap {
+    width: 100%;
+    max-width: 480px;
   }
 
-  @media(max-width:920px){
-    nav.main-links{display:none;}
-    .hero-grid{grid-template-columns:1fr;}
-    .index-strip{grid-template-columns:repeat(2,1fr);}
-    .insight-grid{grid-template-columns:1fr;}
-    .split{grid-template-columns:1fr;}
-    .cta-band{flex-direction:column;align-items:flex-start;}
+  .masthead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .masthead .mark {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: var(--gold);
+  }
+
+  .masthead .clock {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+
+  h1 {
+    font-size: 27px;
+    font-weight: 600;
+    line-height: 1.25;
+    margin: 22px 0 6px;
+    letter-spacing: -0.01em;
+  }
+
+  .sub {
+    color: var(--ink-dim);
+    font-size: 14.5px;
+    line-height: 1.5;
+    margin: 0 0 34px;
+    max-width: 40ch;
+  }
+
+  .field {
+    margin-bottom: 18px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-dim);
+    margin-bottom: 8px;
+  }
+
+  .field label .hint {
+    color: var(--ink-faint);
+    font-weight: 400;
+  }
+
+  .field .input-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    transition: border-color 0.15s ease;
+  }
+
+  .field .input-row:focus-within {
+    border-color: var(--gold-dim);
+  }
+
+  .field .prefix {
+    padding-left: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--ink-faint);
+    font-size: 15px;
+    user-select: none;
+  }
+
+  .field input {
+    flex: 1;
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 14px 16px;
+    letter-spacing: 0.01em;
+  }
+
+  .field input::placeholder {
+    color: var(--ink-faint);
+    font-weight: 400;
+  }
+
+  .field.kode input {
+    text-transform: uppercase;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 19px;
+  }
+
+  .actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 28px;
+  }
+
+  button {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 10px;
+    border: none;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: transform 0.08s ease, filter 0.15s ease;
+  }
+
+  button:active { transform: scale(0.98); }
+
+  #hitung {
+    flex: 1;
+    background: var(--gold);
+    color: #1A1305;
+  }
+
+  #hitung:hover { filter: brightness(1.08); }
+
+  #reset {
+    background: transparent;
+    color: var(--ink-dim);
+    border: 1px solid var(--panel-border);
+  }
+
+  #reset:hover { color: var(--ink); border-color: var(--ink-faint); }
+
+  .result {
+    margin-top: 34px;
+    border-top: 1px solid var(--line);
+    padding-top: 30px;
+    display: none;
+  }
+
+  .result.show { display: block; animation: rise 0.35s ease; }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result .ticker-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .result .ticker-line .code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--ink-dim);
+    letter-spacing: 0.04em;
+  }
+
+  .badge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 100px;
+  }
+
+  .badge.under { background: rgba(52,201,142,0.14); color: var(--up); }
+  .badge.over { background: rgba(232,91,107,0.14); color: var(--down); }
+  .badge.fair { background: rgba(224,166,46,0.14); color: var(--gold); }
+
+  .fair-value {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+
+  .fair-value .rp {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    color: var(--ink-dim);
+    align-self: flex-start;
+    margin-top: 8px;
+  }
+
+  .fair-value .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .fair-value-label {
+    color: var(--ink-dim);
+    font-size: 13.5px;
+    margin-bottom: 26px;
+  }
+
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 22px;
+  }
+
+  .compare-grid > div {
+    background: var(--panel);
+    padding: 16px;
+  }
+
+  .compare-grid .lbl {
+    font-size: 12px;
+    color: var(--ink-faint);
+    margin-bottom: 6px;
+  }
+
+  .compare-grid .val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .note {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--ink-dim);
+    padding: 14px 16px;
+    background: var(--bg-alt);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+  }
+
+  .note strong { color: var(--ink); }
+
+  .foot {
+    margin-top: 40px;
+    font-size: 12px;
+    color: var(--ink-faint);
+    line-height: 1.7;
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+  }
+
+  .error {
+    display: none;
+    margin-top: 16px;
+    font-size: 13.5px;
+    color: var(--down);
+    background: rgba(232,91,107,0.08);
+    border: 1px solid rgba(232,91,107,0.25);
+    padding: 12px 14px;
+    border-radius: 10px;
+  }
+  .error.show { display: block; }
+
+  @media (max-width: 420px) {
+    .fair-value .num { font-size: 40px; }
+    h1 { font-size: 24px; }
   }
 </style>
 </head>
 <body>
+<div class="wrap">
 
-<div class="util-bar">
-  <div class="ticker-track" id="tickerTrack"></div>
+  <div class="masthead">
+    <span class="mark">IDX · VALUASI</span>
+    <span class="clock" id="clock"></span>
+  </div>
+
+  <h1>Cek harga wajar saham</h1>
+  <p class="sub">Hitung estimasi harga wajar pakai Graham Number, lalu bandingkan dengan harga pasar saat ini.</p>
+
+  <div class="field kode">
+    <label for="kode">Kode saham</label>
+    <div class="input-row">
+      <input type="text" id="kode" placeholder="MYOR" maxlength="6">
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="harga">Harga saham saat ini <span class="hint">(Rp)</span></label>
+    <div class="input-row">
+      <span class="prefix">Rp</span>
+      <input type="text" inputmode="decimal" id="harga" placeholder="1.560">
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="bvps">Book value per share — BVPS <span class="hint">(Rp)</span></label>
+    <div class="input-row">
+      <span class="prefix">Rp</span>
+      <input type="text" inputmode="decimal" id="bvps" placeholder="812">
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="eps">Earning per share — EPS TTM <span class="hint">(Rp)</span></label>
+    <div class="input-row">
+      <span class="prefix">Rp</span>
+      <input type="text" inputmode="decimal" id="eps" placeholder="152">
+    </div>
+  </div>
+
+  <div class="error" id="error"></div>
+
+  <div class="actions">
+    <button id="hitung">Hitung harga wajar</button>
+    <button id="reset">Reset</button>
+  </div>
+
+  <div class="result" id="result">
+    <div class="ticker-line">
+      <span class="code" id="resKode">—</span>
+      <span class="badge" id="resBadge">—</span>
+    </div>
+
+    <div class="fair-value">
+      <span class="rp">Rp</span>
+      <span class="num" id="resFair">0</span>
+    </div>
+    <div class="fair-value-label">Estimasi harga wajar (Graham Number)</div>
+
+    <div class="compare-grid">
+      <div>
+        <div class="lbl">Harga saat ini</div>
+        <div class="val" id="gridHarga">Rp 0</div>
+      </div>
+      <div>
+        <div class="lbl">Selisih dari wajar</div>
+        <div class="val" id="gridSelisih">0%</div>
+      </div>
+    </div>
+
+    <div class="note" id="note"></div>
+  </div>
+
+  <div class="foot">
+    Rumus: harga wajar = akar dari (22,5 × EPS × BVPS), metode klasik Benjamin Graham. Hasil ini estimasi kasar berbasis dua rasio saja — bukan rekomendasi beli/jual. Selalu cek laporan keuangan lengkap sebelum memutuskan.
+  </div>
+
 </div>
 
-<header class="site">
-  <div class="wrap nav-row">
-    <div class="logo"><span class="dot"></span>Bursa<span style="color:var(--gold)">AI</span></div>
-    <nav class="main-links">
-      <a href="#pasar">Ringkasan Pasar</a>
-      <a href="#watchlist">Watchlist</a>
-      <a href="#insight">Insight AI</a>
-      <a href="#riset">Riset &amp; Berita</a>
-    </nav>
-    <div class="nav-actions">
-      <a class="btn btn-ghost">Masuk</a>
-      <a class="btn btn-gold">Coba Gratis</a>
-    </div>
-  </div>
-</header>
-
-<section class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <span class="eyebrow-note">Ditenagai model AI internal</span>
-      <h1>Baca arah pasar sebelum <em>ramai dibicarakan</em>.</h1>
-      <p class="lede">BursaAI membaca ribuan laporan keuangan, berita, dan pergerakan harga tiap menit, lalu merangkumnya jadi satu pandangan yang bisa langsung kamu pakai untuk mengambil keputusan.</p>
-      <div class="hero-cta">
-        <a class="btn btn-gold">Mulai analisis pertama</a>
-        <a class="btn btn-ghost">Lihat cara kerjanya</a>
-      </div>
-      <p class="hero-note">Dipakai untuk memantau 900+ saham di BEI dan indeks global secara harian.</p>
-    </div>
-
-    <div class="hero-panel">
-      <div class="hero-panel-top">
-        <div>
-          <div class="hp-label">BBCA · Bank Central Asia</div>
-          <div class="hp-name">Papan Utama</div>
-        </div>
-        <div style="text-align:right">
-          <div class="hp-price">10.425</div>
-          <div class="hp-delta" style="color:var(--up)">+175 (1,71%)</div>
-        </div>
-      </div>
-      <svg viewBox="0 0 400 110" width="100%" height="110" preserveAspectRatio="none">
-        <polyline points="0,80 40,72 80,76 120,60 160,64 200,45 240,50 280,32 320,38 360,18 400,22"
-          fill="none" stroke="#34d399" stroke-width="2.4"/>
-        <polyline points="0,80 40,72 80,76 120,60 160,64 200,45 240,50 280,32 320,38 360,18 400,22 400,110 0,110"
-          fill="url(#g1)" stroke="none" opacity="0.5"/>
-        <defs>
-          <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#34d399" stop-opacity="0.35"/>
-            <stop offset="100%" stop-color="#34d399" stop-opacity="0"/>
-          </linearGradient>
-        </defs>
-      </svg>
-      <div class="ai-callout">
-        <div class="ai-icon">AI</div>
-        <p><strong>Momentum akumulasi terdeteksi.</strong> Volume beli institusi naik 3 hari beruntun, sejalan dengan proyeksi laba kuartal berikutnya yang direvisi naik oleh 6 dari 9 analis yang dipantau.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="pasar">
-  <div class="wrap">
-    <div class="section-head">
-      <div>
-        <h2>Ringkasan pasar hari ini</h2>
-        <p>Pergerakan indeks utama, diperbarui setiap penutupan sesi perdagangan.</p>
-      </div>
-      <a class="see-all" href="#watchlist">Lihat semua indeks →</a>
-    </div>
-
-    <div class="index-strip" id="indexStrip"></div>
-  </div>
-</section>
-
-<section id="watchlist">
-  <div class="wrap">
-    <div class="section-head">
-      <div>
-        <h2>Watchlist kamu</h2>
-        <p>Saham yang sedang kamu pantau, lengkap dengan rekomendasi singkat dari model AI.</p>
-      </div>
-      <a class="see-all">Kelola watchlist →</a>
-    </div>
-
-    <div class="table-card">
-      <table>
-        <thead>
-          <tr>
-            <th>Saham</th>
-            <th class="num">Harga</th>
-            <th class="num">Perubahan</th>
-            <th class="num">Volume</th>
-            <th>Sinyal AI</th>
-          </tr>
-        </thead>
-        <tbody id="watchlistBody"></tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<section id="insight">
-  <div class="wrap">
-    <div class="section-head">
-      <div>
-        <h2>Insight AI hari ini</h2>
-        <p>Tiga temuan yang paling relevan dari pemindaian pasar pagi ini, dengan tingkat keyakinan model.</p>
-      </div>
-    </div>
-
-    <div class="insight-grid" id="insightGrid"></div>
-  </div>
-</section>
-
-<section id="riset">
-  <div class="wrap">
-    <div class="section-head">
-      <div>
-        <h2>Grafik &amp; berita terbaru</h2>
-        <p>Pantau pergerakan harga sambil membaca konteks di baliknya.</p>
-      </div>
-    </div>
-
-    <div class="split">
-      <div class="chart-card">
-        <div class="chart-head">
-          <div>
-            <div class="cname">TLKM · Telkom Indonesia</div>
-            <div class="cprice">3.180 <span style="font-size:13px;color:var(--down)">-40 (1,24%)</span></div>
-          </div>
-          <div class="range-tabs">
-            <button class="active">1H</button>
-            <button>1M</button>
-            <button>6B</button>
-            <button>1T</button>
-          </div>
-        </div>
-        <svg viewBox="0 0 560 220" width="100%" height="260" preserveAspectRatio="none" style="margin-top:14px">
-          <line x1="0" y1="55" x2="560" y2="55" stroke="#253451" stroke-width="1"/>
-          <line x1="0" y1="110" x2="560" y2="110" stroke="#253451" stroke-width="1"/>
-          <line x1="0" y1="165" x2="560" y2="165" stroke="#253451" stroke-width="1"/>
-          <polyline points="0,100 40,95 80,110 120,90 160,105 200,80 240,88 280,70 320,95 360,75 400,60 440,78 480,55 520,70 560,50"
-            fill="none" stroke="#f2596b" stroke-width="2.2"/>
-          <polyline points="0,100 40,95 80,110 120,90 160,105 200,80 240,88 280,70 320,95 360,75 400,60 440,78 480,55 520,70 560,50 560,220 0,220"
-            fill="url(#g2)" stroke="none"/>
-          <defs>
-            <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#f2596b" stop-opacity="0.28"/>
-              <stop offset="100%" stop-color="#f2596b" stop-opacity="0"/>
-            </linearGradient>
-          </defs>
-        </svg>
-      </div>
-
-      <div class="chart-card news-list" id="newsList"></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <div class="cta-band">
-      <div>
-        <h2>Siap membaca pasar dengan lebih tenang?</h2>
-        <p>Buat watchlist pertamamu dan dapatkan ringkasan AI setiap pagi sebelum bursa dibuka.</p>
-      </div>
-      <a class="btn btn-gold" style="white-space:nowrap">Buat akun gratis</a>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap">
-    <div class="foot-grid">
-      <div class="logo" style="font-size:17px">Bursa<span style="color:var(--gold)">AI</span></div>
-      <div class="foot-links">
-        <a href="#pasar">Ringkasan Pasar</a>
-        <a href="#watchlist">Watchlist</a>
-        <a href="#insight">Insight AI</a>
-        <a href="#riset">Riset &amp; Berita</a>
-        <a href="#">Bantuan</a>
-      </div>
-    </div>
-    <div class="disclaimer">
-      Ini adalah halaman demonstrasi. Seluruh harga, indeks, dan analisis AI di halaman ini bersifat fiktif dan hanya untuk keperluan ilustrasi desain — bukan rekomendasi investasi. © 2026 BursaAI.
-    </div>
-  </div>
-</footer>
-
 <script>
-  // ---- Ticker data ----
-  const tickerData = [
-    ["IHSG", "7.412,88", "+0,64%", true],
-    ["BBCA", "10.425", "+1,71%", true],
-    ["BBRI", "4.580", "-0,65%", false],
-    ["TLKM", "3.180", "-1,24%", false],
-    ["ASII", "5.225", "+0,48%", true],
-    ["GOTO", "82", "+2,50%", true],
-    ["S&P 500", "5.812,4", "+0,32%", true],
-    ["Nasdaq", "18.245,1", "-0,18%", false],
-    ["USD/IDR", "16.140", "+0,05%", false],
-    ["Emas", "2.412,6", "+0,21%", true],
-  ];
-  const track = document.getElementById('tickerTrack');
-  const renderTicker = () => tickerData.map(([n,p,c,up]) =>
-    `<span>${n} <span class="mono">${p}</span> <span class="${up?'t-up':'t-down'}">${c}</span></span>`
-  ).join('');
-  track.innerHTML = renderTicker() + renderTicker();
+  function fmtRp(n) {
+    return Math.round(n).toLocaleString('id-ID');
+  }
 
-  // ---- Index strip ----
-  const indices = [
-    {name:"IHSG", val:"7.412,88", chg:"+47,20 (0,64%)", up:true, pts:"0,30 15,26 30,28 45,20 60,22 75,14 90,16 105,6"},
-    {name:"LQ45", val:"985,44", chg:"+5,10 (0,52%)", up:true, pts:"0,25 15,22 30,24 45,18 60,20 75,12 90,14 105,8"},
-    {name:"S&P 500", val:"5.812,4", chg:"+18,60 (0,32%)", up:true, pts:"0,20 15,22 30,16 45,18 60,12 75,14 90,8 105,6"},
-    {name:"Nasdaq Composite", val:"18.245,1", chg:"-33,40 (0,18%)", up:false, pts:"0,8 15,10 30,14 45,12 60,18 75,16 90,22 105,26"},
-  ];
-  document.getElementById('indexStrip').innerHTML = indices.map(i => `
-    <div class="idx-card">
-      <div class="nm">${i.name}</div>
-      <div class="val">${i.val}</div>
-      <div class="chg" style="color:${i.up?'var(--up)':'var(--down)'}">${i.chg}</div>
-      <svg viewBox="0 0 105 32" width="100%" height="32" preserveAspectRatio="none">
-        <polyline points="${i.pts}" fill="none" stroke="${i.up?'#34d399':'#f2596b'}" stroke-width="1.8"/>
-      </svg>
-    </div>
-  `).join('');
+  function parseNum(str) {
+    if (!str) return NaN;
+    let cleaned = str.replace(/\./g, '').replace(/,/g, '.').replace(/[^\d.-]/g, '');
+    return parseFloat(cleaned);
+  }
 
-  // ---- Watchlist ----
-  const watchlist = [
-    {code:"BBCA", name:"Bank Central Asia", price:"10.425", chg:"+175", pct:"+1,71%", up:true, vol:"32,4jt", tag:"buy", note:"Akumulasi institusi menguat"},
-    {code:"BBRI", name:"Bank Rakyat Indonesia", price:"4.580", chg:"-30", pct:"-0,65%", up:false, vol:"58,1jt", tag:"hold", note:"Menunggu rilis NPL kuartalan"},
-    {code:"TLKM", name:"Telkom Indonesia", price:"3.180", chg:"-40", pct:"-1,24%", up:false, vol:"44,7jt", tag:"hold", note:"Tekanan dari sentimen sektor"},
-    {code:"ASII", name:"Astra International", price:"5.225", chg:"+25", pct:"+0,48%", up:true, vol:"19,2jt", tag:"buy", note:"Penjualan otomotif di atas ekspektasi"},
-    {code:"GOTO", name:"GoTo Gojek Tokopedia", price:"82", chg:"+2", pct:"+2,50%", up:true, vol:"612,3jt", tag:"sell", note:"Reli jangka pendek, valuasi meregang"},
-    {code:"ANTM", name:"Aneka Tambang", price:"1.640", chg:"+20", pct:"+1,23%", up:true, vol:"27,9jt", tag:"buy", note:"Harga nikel global menopang margin"},
-  ];
-  document.getElementById('watchlistBody').innerHTML = watchlist.map(s => `
-    <tr>
-      <td>
-        <div class="stock-name">${s.code}</div>
-        <div class="stock-sub">${s.name}</div>
-      </td>
-      <td class="num p-val">${s.price}</td>
-      <td class="num">
-        <span class="${s.up?'badge-up':'badge-down'}">${s.chg} (${s.pct})</span>
-      </td>
-      <td class="num p-val">${s.vol}</td>
-      <td>
-        <span class="tag ${s.tag}">${s.tag==='buy'?'Beli':s.tag==='hold'?'Tahan':'Jual'}</span>
-        <span style="font-size:12.5px;color:var(--text-faint);margin-left:8px">${s.note}</span>
-      </td>
-    </tr>
-  `).join('');
+  const clockEl = document.getElementById('clock');
+  function tick() {
+    const now = new Date();
+    clockEl.textContent = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  }
+  tick();
+  setInterval(tick, 1000);
 
-  // ---- AI Insight cards ----
-  const insights = [
-    {
-      code:"BBCA", conf:"87% yakin",
-      text:"Pola akumulasi volume tinggi tanpa kenaikan harga signifikan biasanya mendahului pergerakan naik dalam 5-10 hari perdagangan berikutnya, berdasarkan 340 pola historis serupa.",
-      foot:"Horizon: 1-2 minggu"
-    },
-    {
-      code:"GOTO", conf:"64% yakin",
-      text:"Kenaikan harga 3 hari terakhir tidak diikuti kenaikan volume yang proporsional, menandakan minat beli mulai melemah meski tren jangka pendek masih positif.",
-      foot:"Horizon: 3-5 hari"
-    },
-    {
-      code:"ANTM", conf:"79% yakin",
-      text:"Korelasi harga saham dengan harga nikel dunia menguat ke 0,82 dalam sebulan terakhir, memberi sinyal bahwa pergerakan komoditas kini jadi penggerak utama.",
-      foot:"Horizon: 1 bulan"
-    },
-  ];
-  document.getElementById('insightGrid').innerHTML = insights.map(i => `
-    <div class="insight-card">
-      <div class="insight-top">
-        <span class="stock">${i.code}</span>
-        <span class="conf-ring">${i.conf}</span>
-      </div>
-      <p>${i.text}</p>
-      <div class="insight-foot">
-        <span>${i.foot}</span>
-        <span>Model v2.3</span>
-      </div>
-    </div>
-  `).join('');
+  const errorEl = document.getElementById('error');
+  const resultEl = document.getElementById('result');
 
-  // ---- News ----
-  const news = [
-    {src:"Riset Pasar · 2 jam lalu", h:"Bank sentral pertahankan suku bunga, IHSG ditutup menguat tipis"},
-    {src:"Sektor Telekomunikasi · 4 jam lalu", h:"Belanja modal operator seluler diproyeksi naik 12% tahun ini"},
-    {src:"Komoditas · 6 jam lalu", h:"Harga nikel dunia naik ke level tertinggi dalam tiga bulan"},
-    {src:"Makro · 8 jam lalu", h:"Rupiah bergerak stabil di tengah ketidakpastian suku bunga The Fed"},
-  ];
-  document.getElementById('newsList').innerHTML = news.map(n => `
-    <div class="news-item">
-      <div class="src">${n.src}</div>
-      <a class="headline" href="#">${n.h}</a>
-    </div>
-  `).join('');
+  function showError(msg) {
+    errorEl.textContent = msg;
+    errorEl.classList.add('show');
+    resultEl.classList.remove('show');
+  }
 
-  // ---- Range tab toggle (visual only) ----
-  document.querySelectorAll('.range-tabs button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.range-tabs button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    });
+  function clearError() {
+    errorEl.classList.remove('show');
+  }
+
+  document.getElementById('hitung').addEventListener('click', () => {
+    clearError();
+
+    const kode = document.getElementById('kode').value.trim().toUpperCase() || '—';
+    const harga = parseNum(document.getElementById('harga').value);
+    const bvps = parseNum(document.getElementById('bvps').value);
+    const eps = parseNum(document.getElementById('eps').value);
+
+    if (isNaN(harga) || isNaN(bvps) || isNaN(eps)) {
+      showError('Isi harga saham, BVPS, dan EPS dengan angka yang valid.');
+      return;
+    }
+    if (bvps <= 0 || eps <= 0) {
+      showError('BVPS dan EPS harus lebih besar dari nol — Graham Number tidak berlaku untuk laba atau ekuitas negatif.');
+      return;
+    }
+    if (harga <= 0) {
+      showError('Harga saham harus lebih besar dari nol.');
+      return;
+    }
+
+    const fairValue = Math.sqrt(22.5 * eps * bvps);
+    const selisihPersen = ((harga - fairValue) / fairValue) * 100;
+
+    document.getElementById('resKode').textContent = kode;
+    document.getElementById('resFair').textContent = fmtRp(fairValue);
+    document.getElementById('gridHarga').textContent = 'Rp ' + fmtRp(harga);
+    document.getElementById('gridSelisih').textContent = (selisihPersen > 0 ? '+' : '') + selisihPersen.toFixed(1) + '%';
+
+    const badge = document.getElementById('resBadge');
+    const note = document.getElementById('note');
+    const gridSelisih = document.getElementById('gridSelisih');
+
+    if (selisihPersen <= -5) {
+      badge.textContent = 'Di bawah harga wajar';
+      badge.className = 'badge under';
+      gridSelisih.style.color = 'var(--up)';
+      note.innerHTML = '<strong>' + kode + '</strong> diperdagangkan di bawah estimasi harga wajarnya. Ini bisa menandakan saham sedang murah relatif terhadap laba dan ekuitasnya — tapi cek juga alasan di balik harga rendah tersebut.';
+    } else if (selisihPersen >= 5) {
+      badge.textContent = 'Di atas harga wajar';
+      badge.className = 'badge over';
+      gridSelisih.style.color = 'var(--down)';
+      note.innerHTML = '<strong>' + kode + '</strong> diperdagangkan di atas estimasi harga wajarnya. Bisa jadi pasar menilai prospek pertumbuhannya lebih tinggi dari yang ditangkap rasio BVPS dan EPS saja.';
+    } else {
+      badge.textContent = 'Mendekati harga wajar';
+      badge.className = 'badge fair';
+      gridSelisih.style.color = 'var(--ink)';
+      note.innerHTML = '<strong>' + kode + '</strong> diperdagangkan dekat dengan estimasi harga wajarnya berdasarkan BVPS dan EPS saat ini.';
+    }
+
+    resultEl.classList.add('show');
+  });
+
+  document.getElementById('reset').addEventListener('click', () => {
+    document.getElementById('kode').value = '';
+    document.getElementById('harga').value = '';
+    document.getElementById('bvps').value = '';
+    document.getElementById('eps').value = '';
+    clearError();
+    resultEl.classList.remove('show');
   });
 </script>
 
