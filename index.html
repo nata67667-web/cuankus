@@ -9,27 +9,22 @@
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',sans-serif; }
   body { background:#f0f2f5; color:#333; }
   .app { display:flex; height:100vh; overflow:hidden; }
-  
   .sidebar { width:220px; background:#1e293b; color:#fff; display:flex; flex-direction:column; }
   .logo { padding:20px; font-size:20px; font-weight:bold; text-align:center; border-bottom:1px solid #334155; }
   .logo span { color:#22c55e; }
   .nav { flex:1; padding:10px 0; }
-  .nav button { width:100%; padding:14px 20px; background:none; border:none; color:#cbd5e1; text-align:left; cursor:pointer; font-size:14px; display:flex; align-items:center; gap:10px; }
+  .nav button { width:100%; padding:14px 20px; background:none; border:none; color:#cbd5e1; text-align:left; cursor:pointer; font-size:14px; }
   .nav button:hover { background:#334155; color:#fff; }
   .nav button.active { background:#22c55e; color:#fff; font-weight:600; }
-  
   .main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
   .topbar { background:#fff; padding:15px 25px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; }
   .topbar h2 { font-size:18px; }
   .date { color:#64748b; font-size:13px; }
-  
   .content { flex:1; overflow-y:auto; padding:20px; }
   .page { display:none; }
   .page.active { display:block; }
-  
   .search-box { margin-bottom:15px; }
   .search-box input { width:100%; padding:12px 15px; border:1px solid #e2e8f0; border-radius:10px; font-size:14px; }
-  
   .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:15px; }
   .card { background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.08); cursor:pointer; transition:0.2s; }
   .card:hover { transform:translateY(-3px); box-shadow:0 6px 16px rgba(0,0,0,0.12); }
@@ -37,7 +32,6 @@
   .card .info { padding:10px; }
   .card .name { font-weight:600; font-size:13px; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .card .price { color:#22c55e; font-weight:bold; font-size:14px; }
-  
   .cart-panel { width:340px; background:#fff; border-left:1px solid #e2e8f0; display:flex; flex-direction:column; }
   .cart-header { padding:15px 20px; border-bottom:1px solid #e2e8f0; font-weight:bold; }
   .cart-items { flex:1; overflow-y:auto; padding:10px; }
@@ -48,38 +42,28 @@
   .cart-item .detail .p { font-size:12px; color:#64748b; }
   .qty-control { display:flex; align-items:center; gap:6px; }
   .qty-control button { width:24px; height:24px; border:none; background:#f1f5f9; border-radius:6px; cursor:pointer; font-weight:bold; }
-  .qty-control button:hover { background:#e2e8f0; }
   .qty-control span { min-width:20px; text-align:center; font-size:13px; }
-  
   .cart-footer { padding:15px 20px; border-top:1px solid #e2e8f0; background:#f8fafc; }
   .row { display:flex; justify-content:space-between; margin-bottom:8px; font-size:14px; }
   .row.total { font-size:18px; font-weight:bold; color:#22c55e; margin:10px 0; padding-top:10px; border-top:1px dashed #cbd5e1; }
   .btn-pay { width:100%; padding:14px; background:#22c55e; color:#fff; border:none; border-radius:10px; font-size:15px; font-weight:bold; cursor:pointer; margin-top:8px; }
-  .btn-pay:hover { background:#16a34a; }
   .btn-pay:disabled { background:#cbd5e1; cursor:not-allowed; }
   .btn-clear { width:100%; padding:10px; background:#ef4444; color:#fff; border:none; border-radius:10px; font-size:13px; cursor:pointer; margin-top:6px; }
-  
   .form-card { background:#fff; padding:20px; border-radius:12px; box-shadow:0 1px 3px rgba(0,0,0,0.08); margin-bottom:20px; }
   .form-card h3 { margin-bottom:15px; font-size:16px; }
   .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
   .form-row.full { grid-template-columns:1fr; }
   .form-group label { display:block; font-size:12px; color:#64748b; margin-bottom:5px; font-weight:600; }
-  .form-group input, .form-group textarea { width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; font-size:14px; }
-  .form-group input:focus, .form-group textarea:focus { outline:none; border-color:#22c55e; }
+  .form-group input { width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; font-size:14px; }
+  .form-group input:focus { outline:none; border-color:#22c55e; }
   .btn { padding:10px 20px; border:none; border-radius:8px; font-weight:600; cursor:pointer; font-size:14px; }
   .btn-primary { background:#22c55e; color:#fff; }
-  .btn-primary:hover { background:#16a34a; }
   .btn-secondary { background:#f1f5f9; color:#334155; }
-  .btn-secondary:hover { background:#e2e8f0; }
   .btn-sm { padding:6px 12px; font-size:12px; }
   .btn-danger { background:#ef4444; color:#fff; }
-  .btn-danger:hover { background:#dc2626; }
-  
-  table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; }
+  table { width:100%; border-collapse:collapse; }
   th, td { padding:12px 15px; text-align:left; font-size:13px; border-bottom:1px solid #f1f5f9; }
   th { background:#f8fafc; font-weight:600; color:#475569; }
-  tr:hover { background:#f8fafc; }
-  
   .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:15px; margin-bottom:20px; }
   .stat-card { background:#fff; padding:18px; border-radius:12px; box-shadow:0 1px 3px rgba(0,0,0,0.08); }
   .stat-card .label { font-size:12px; color:#64748b; margin-bottom:6px; }
@@ -88,32 +72,26 @@
   .stat-card .value.blue { color:#3b82f6; }
   .chart-container { background:#fff; padding:20px; border-radius:12px; box-shadow:0 1px 3px rgba(0,0,0,0.08); margin-bottom:20px; }
   .chart-container h3 { margin-bottom:15px; font-size:16px; }
-  
-  .modal-bg { position:fixed; inset:0; background:rgba(0,0,0,0.5); display:none; align-items:center; justify-content:center; z-index:100; }
+  .modal-bg { position:fixed; inset:0; background:rgba(0,0,0,0.5); display:none; align-items:center; justify-content:center; z-index:100; padding:15px; }
   .modal-bg.show { display:flex; }
-  .modal { background:#fff; border-radius:12px; padding:25px; max-width:400px; width:90%; max-height:90vh; overflow-y:auto; }
+  .modal { background:#fff; border-radius:12px; padding:25px; max-width:400px; width:100%; max-height:90vh; overflow-y:auto; }
   .modal h3 { margin-bottom:15px; }
-  
   .empty { text-align:center; padding:40px; color:#94a3b8; }
   .empty-icon { font-size:48px; margin-bottom:10px; }
-  
   .quick-cash { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:8px; }
   .quick-cash button { padding:8px; background:#f1f5f9; border:none; border-radius:8px; cursor:pointer; font-size:12px; font-weight:600; }
-  .quick-cash button:hover { background:#e2e8f0; }
-  
-  .riwayat-item { padding:12px; border:1px solid #f1f5f9; border-radius:10px; margin-bottom:10px; transition:0.2s; }
-  .riwayat-item:hover { border-color:#e2e8f0; background:#fafbfc; }
+  .riwayat-item { padding:12px; border:1px solid #f1f5f9; border-radius:10px; margin-bottom:10px; }
   .riwayat-header { display:flex; justify-content:space-between; margin-bottom:8px; align-items:center; }
   .riwayat-items { font-size:13px; color:#475569; margin-bottom:8px; }
   .riwayat-footer { display:flex; gap:20px; font-size:13px; align-items:center; flex-wrap:wrap; }
-  
   @media(max-width:768px){
     .app { flex-direction:column; }
     .sidebar { width:100%; flex-direction:row; overflow-x:auto; }
     .logo { display:none; }
     .nav { display:flex; }
-    .nav button { white-space:nowrap; }
+    .nav button { white-space:nowrap; padding:12px; }
     .cart-panel { width:100%; max-height:45vh; }
+    .form-row { grid-template-columns:1fr; }
   }
 </style>
 </head>
@@ -135,38 +113,25 @@
       <h2 id="pageTitle">Kasir</h2>
       <div class="date" id="todayDate"></div>
     </div>
-
     <div class="content">
+      <!-- KASIR -->
       <div class="page active" id="page-kasir">
-        <div class="search-box">
-          <input type="text" id="searchProduk" placeholder="🔍 Cari menu..." oninput="renderProduk()">
-        </div>
+        <div class="search-box"><input type="text" id="searchProduk" placeholder="🔍 Cari menu..." oninput="renderProduk()"></div>
         <div class="grid" id="gridProduk"></div>
       </div>
 
+      <!-- MENU -->
       <div class="page" id="page-menu">
         <div class="form-card">
           <h3 id="formMenuTitle">➕ Tambah Menu</h3>
           <input type="hidden" id="editId">
           <div class="form-row">
-            <div class="form-group">
-              <label>Nama Menu</label>
-              <input type="text" id="mNama" placeholder="Nasi Goreng">
-            </div>
-            <div class="form-group">
-              <label>Kategori</label>
-              <input type="text" id="mKategori" placeholder="Makanan">
-            </div>
+            <div class="form-group"><label>Nama Menu</label><input type="text" id="mNama" placeholder="Nasi Goreng"></div>
+            <div class="form-group"><label>Kategori</label><input type="text" id="mKategori" placeholder="Makanan"></div>
           </div>
           <div class="form-row">
-            <div class="form-group">
-              <label>Harga Jual (Rp)</label>
-              <input type="number" id="mHarga" placeholder="15000">
-            </div>
-            <div class="form-group">
-              <label>HPP / Modal (Rp)</label>
-              <input type="number" id="mHpp" placeholder="8000">
-            </div>
+            <div class="form-group"><label>Harga Jual (Rp)</label><input type="number" id="mHarga" placeholder="15000"></div>
+            <div class="form-group"><label>HPP / Modal (Rp)</label><input type="number" id="mHpp" placeholder="8000"></div>
           </div>
           <div class="form-row full">
             <div class="form-group">
@@ -178,73 +143,42 @@
           <button class="btn btn-primary" onclick="simpanMenu()">Simpan Menu</button>
           <button class="btn btn-secondary" onclick="resetForm()">Reset</button>
         </div>
-
         <div class="form-card">
           <h3>📋 Daftar Menu</h3>
           <div id="listMenu"></div>
         </div>
       </div>
 
+      <!-- DASHBOARD -->
       <div class="page" id="page-dashboard">
         <div class="stats">
-          <div class="stat-card">
-            <div class="label">Transaksi Hari Ini</div>
-            <div class="value" id="statTrx">0</div>
-          </div>
-          <div class="stat-card">
-            <div class="label">Pendapatan</div>
-            <div class="value green" id="statPendapatan">Rp 0</div>
-          </div>
-          <div class="stat-card">
-            <div class="label">Laba Kotor</div>
-            <div class="value blue" id="statLaba">Rp 0</div>
-          </div>
-          <div class="stat-card">
-            <div class="label">Item Terjual</div>
-            <div class="value" id="statItem">0</div>
-          </div>
+          <div class="stat-card"><div class="label">Transaksi Hari Ini</div><div class="value" id="statTrx">0</div></div>
+          <div class="stat-card"><div class="label">Pendapatan</div><div class="value green" id="statPendapatan">Rp 0</div></div>
+          <div class="stat-card"><div class="label">Laba Kotor</div><div class="value blue" id="statLaba">Rp 0</div></div>
+          <div class="stat-card"><div class="label">Item Terjual</div><div class="value" id="statItem">0</div></div>
         </div>
-        <div class="chart-container">
-          <h3>📈 Penjualan Per Jam (Hari Ini)</h3>
-          <canvas id="chartJam" height="80"></canvas>
-        </div>
-        <div class="chart-container">
-          <h3>🏆 Menu Terlaris Hari Ini</h3>
-          <canvas id="chartMenu" height="100"></canvas>
-        </div>
+        <div class="chart-container"><h3>📈 Penjualan Per Jam (Hari Ini)</h3><canvas id="chartJam" height="80"></canvas></div>
+        <div class="chart-container"><h3>🏆 Menu Terlaris Hari Ini</h3><canvas id="chartMenu" height="100"></canvas></div>
       </div>
 
+      <!-- RIWAYAT -->
       <div class="page" id="page-riwayat">
         <div class="form-card">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <h3 style="margin:0;">🧾 Riwayat Penjualan Hari Ini (<span id="riwayatCount">0</span> transaksi)</h3>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
+            <h3 style="margin:0;">🧾 Riwayat Hari Ini (<span id="riwayatCount">0</span> transaksi)</h3>
             <button class="btn btn-danger btn-sm" onclick="hapusSemuaRiwayat()">🗑️ Hapus Semua</button>
           </div>
           <div id="listRiwayat"></div>
         </div>
       </div>
 
+      <!-- SETTING -->
       <div class="page" id="page-setting">
         <div class="form-card">
           <h3>⚙️ Informasi Toko</h3>
-          <div class="form-row full">
-            <div class="form-group">
-              <label>Nama Toko / Warung</label>
-              <input type="text" id="setNamaToko" placeholder="Warung Bu Siti">
-            </div>
-          </div>
-          <div class="form-row full">
-            <div class="form-group">
-              <label>Alamat / Catatan (opsional)</label>
-              <input type="text" id="setAlamat" placeholder="Jl. Merdeka No. 10">
-            </div>
-          </div>
-          <div class="form-row full">
-            <div class="form-group">
-              <label>No. Telepon / WhatsApp (opsional)</label>
-              <input type="text" id="setTelp" placeholder="0812xxxx">
-            </div>
-          </div>
+          <div class="form-row full"><div class="form-group"><label>Nama Toko</label><input type="text" id="setNamaToko" placeholder="Warung Bu Siti"></div></div>
+          <div class="form-row full"><div class="form-group"><label>Alamat (opsional)</label><input type="text" id="setAlamat" placeholder="Jl. Merdeka No. 10"></div></div>
+          <div class="form-row full"><div class="form-group"><label>Telepon (opsional)</label><input type="text" id="setTelp" placeholder="0812xxxx"></div></div>
           <button class="btn btn-primary" onclick="simpanSetting()">💾 Simpan</button>
         </div>
       </div>
@@ -262,6 +196,7 @@
   </div>
 </div>
 
+<!-- MODAL BAYAR -->
 <div class="modal-bg" id="modalBayar">
   <div class="modal">
     <h3>💵 Pembayaran</h3>
@@ -281,6 +216,7 @@
   </div>
 </div>
 
+<!-- MODAL STRUK -->
 <div class="modal-bg" id="modalStruk">
   <div class="modal">
     <h3>✅ Pembayaran Berhasil</h3>
@@ -290,13 +226,13 @@
   </div>
 </div>
 
-<!-- Modal Konfirmasi Hapus -->
+<!-- MODAL HAPUS -->
 <div class="modal-bg" id="modalHapus">
   <div class="modal">
     <h3>⚠️ Konfirmasi Hapus</h3>
     <p id="hapusMsg" style="margin-bottom:15px; color:#475569;">Yakin ingin menghapus transaksi ini?</p>
     <div style="background:#fef3c7; border-left:4px solid #f59e0b; padding:12px; border-radius:6px; margin-bottom:15px; font-size:13px; color:#78350f;">
-      <b>Perhatian:</b> Setelah dihapus, transaksi ini akan <b>hilang permanen</b> dan total di Dashboard akan otomatis berkurang. Data tidak dapat dikembalikan.
+      <b>Perhatian:</b> Transaksi akan <b>hilang permanen</b> dan total di Dashboard otomatis berkurang. Tidak bisa dikembalikan.
     </div>
     <div style="display:flex; gap:10px;">
       <button class="btn btn-secondary" style="flex:1;" onclick="closeModalHapus()">Batal</button>
@@ -310,9 +246,9 @@ let menus = JSON.parse(localStorage.getItem('kasir_menus') || '[]');
 let transaksi = JSON.parse(localStorage.getItem('kasir_transaksi') || '[]');
 let setting = JSON.parse(localStorage.getItem('kasir_setting') || '{"namaToko":"KasirKu UMKM","alamat":"","telp":""}');
 let cart = [];
-let chartJam, chartMenu;
+let chartJam = null, chartMenu = null;
 let bayarTotalVal = 0;
-let hapusTarget = null; // id transaksi yang akan dihapus
+let hapusTarget = null;
 
 document.getElementById('todayDate').textContent = new Date().toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
 
@@ -321,9 +257,9 @@ if (menus.length === 0) {
     {id:1, nama:'Nasi Goreng', kategori:'Makanan', harga:15000, hpp:8000, gambar:''},
     {id:2, nama:'Mie Ayam', kategori:'Makanan', harga:12000, hpp:6000, gambar:''},
     {id:3, nama:'Es Teh', kategori:'Minuman', harga:5000, hpp:1500, gambar:''},
-    {id:4, nama:'Ayam Bakar', kategori:'Makanan', harga:20000, hpp:12000, gambar:''},
+    {id:4, nama:'Ayam Bakar', kategori:'Makanan', harga:20000, hpp:12000, gambar:''}
   ];
-  saveMenus();
+  localStorage.setItem('kasir_menus', JSON.stringify(menus));
 }
 
 function showPage(page, btn) {
@@ -331,26 +267,27 @@ function showPage(page, btn) {
   document.getElementById('page-' + page).classList.add('active');
   document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('pageTitle').textContent = btn.textContent.trim().substring(2);
+  const title = btn.textContent.replace(/[🛒📋📊🧾⚙️]/g,'').trim();
+  document.getElementById('pageTitle').textContent = title;
   document.getElementById('cartPanel').style.display = page === 'kasir' ? 'flex' : 'none';
-  
   if (page === 'dashboard') renderDashboard();
   if (page === 'riwayat') renderRiwayat();
   if (page === 'menu') renderListMenu();
   if (page === 'setting') loadSetting();
 }
 
+// ===== PRODUK =====
 function renderProduk() {
-  const q = document.getElementById('searchProduk').value.toLowerCase();
+  const q = (document.getElementById('searchProduk').value || '').toLowerCase();
   const grid = document.getElementById('gridProduk');
   const filtered = menus.filter(m => m.nama.toLowerCase().includes(q));
   if (filtered.length === 0) {
-    grid.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>Belum ada menu. Tambahkan di Kelola Menu.</div>';
+    grid.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>Belum ada menu</div>';
     return;
   }
   grid.innerHTML = filtered.map(m => `
     <div class="card" onclick="addToCart(${m.id})">
-      <img src="${m.gambar || 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22150%22 height=%22100%22><rect fill=%22%23f1f5f9%22 width=%22150%22 height=%22100%22/><text x=%2250%25%22 y=%2255%25%22 text-anchor=%22middle%22 fill=%22%23cbd5e1%22 font-size=%2230%22>🍽️</text></svg>'}" alt="${m.nama}">
+      <img src="${m.gambar || 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22150%22 height=%22100%22><rect fill=%22%23f1f5f9%22 width=%22150%22 height=%22100%22/><text x=%2275%22 y=%2265%22 text-anchor=%22middle%22 fill=%22%23cbd5e1%22 font-size=%2235%22>🍽️</text></svg>'}">
       <div class="info">
         <div class="name">${m.nama}</div>
         <div class="price">Rp ${m.harga.toLocaleString('id-ID')}</div>
@@ -359,6 +296,7 @@ function renderProduk() {
   `).join('');
 }
 
+// ===== CART =====
 function addToCart(id) {
   const m = menus.find(x => x.id === id);
   const exist = cart.find(x => x.id === id);
@@ -374,7 +312,7 @@ function renderCart() {
   } else {
     items.innerHTML = cart.map((c, i) => `
       <div class="cart-item">
-        <img src="${c.gambar || 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2245%22 height=%2245%22><rect fill=%22%23f1f5f9%22 width=%2245%22 height=%2245%22/><text x=%2250%25%22 y=%2265%25%22 text-anchor=%22middle%22 fill=%22%23cbd5e1%22 font-size=%2220%22>🍽️</text></svg>'}">
+        <img src="${c.gambar || 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2245%22 height=%2245%22><rect fill=%22%23f1f5f9%22 width=%2245%22 height=%2245%22/><text x=%2222%22 y=%2230%22 text-anchor=%22middle%22 fill=%22%23cbd5e1%22 font-size=%2220%22>🍽️</text></svg>'}">
         <div class="detail">
           <div class="n">${c.nama}</div>
           <div class="p">Rp ${(c.harga*c.qty).toLocaleString('id-ID')}</div>
@@ -387,7 +325,6 @@ function renderCart() {
       </div>
     `).join('');
   }
-  
   const subtotal = cart.reduce((s, c) => s + c.harga * c.qty, 0);
   document.getElementById('cartTotal').textContent = 'Rp ' + subtotal.toLocaleString('id-ID');
   document.getElementById('btnBayar').disabled = cart.length === 0;
@@ -406,19 +343,16 @@ function clearCart() {
   }
 }
 
+// ===== BAYAR =====
 function bukaBayar() {
   if (!cart.length) return;
   bayarTotalVal = cart.reduce((s, c) => s + c.harga * c.qty, 0);
   document.getElementById('bayarTotal').textContent = 'Rp ' + bayarTotalVal.toLocaleString('id-ID');
   document.getElementById('bayarUang').value = '';
   document.getElementById('bayarKembali').textContent = 'Rp 0';
-  
-  const quick = [bayarTotalVal, 20000, 50000, 100000];
-  const unique = [...new Set(quick)].filter(x => x >= bayarTotalVal).slice(0, 6);
-  document.getElementById('quickCash').innerHTML = unique.map(x => 
-    `<button onclick="setUang(${x})">Rp ${x.toLocaleString('id-ID')}</button>`
-  ).join('');
-  
+  document.getElementById('bayarKembali').style.color = '#22c55e';
+  const quick = [...new Set([bayarTotalVal, 20000, 50000, 100000])].filter(x => x >= bayarTotalVal).slice(0, 6);
+  document.getElementById('quickCash').innerHTML = quick.map(x => `<button onclick="setUang(${x})">Rp ${x.toLocaleString('id-ID')}</button>`).join('');
   document.getElementById('modalBayar').classList.add('show');
   setTimeout(() => document.getElementById('bayarUang').focus(), 100);
 }
@@ -432,9 +366,13 @@ function hitungKembalian() {
   const uang = parseInt(document.getElementById('bayarUang').value) || 0;
   const kembali = uang - bayarTotalVal;
   const el = document.getElementById('bayarKembali');
-  el.textContent = 'Rp ' + (kembali >= 0 ? kembali : 0).toLocaleString('id-ID');
-  el.style.color = kembali >= 0 ? '#22c55e' : '#ef4444';
-  if (kembali < 0) el.textContent = 'Kurang Rp ' + Math.abs(kembali).toLocaleString('id-ID');
+  if (kembali >= 0) {
+    el.textContent = 'Rp ' + kembali.toLocaleString('id-ID');
+    el.style.color = '#22c55e';
+  } else {
+    el.textContent = 'Kurang Rp ' + Math.abs(kembali).toLocaleString('id-ID');
+    el.style.color = '#ef4444';
+  }
 }
 
 function closeModalBayar() {
@@ -444,7 +382,6 @@ function closeModalBayar() {
 function konfirmasiBayar() {
   const uang = parseInt(document.getElementById('bayarUang').value) || 0;
   if (uang < bayarTotalVal) { alert('Uang kurang!'); return; }
-  
   const subtotal = cart.reduce((s, c) => s + c.harga * c.qty, 0);
   const totalHpp = cart.reduce((s, c) => s + c.hpp * c.qty, 0);
   const trx = {
@@ -459,7 +396,6 @@ function konfirmasiBayar() {
   };
   transaksi.push(trx);
   localStorage.setItem('kasir_transaksi', JSON.stringify(transaksi));
-  
   closeModalBayar();
   showStruk(trx);
   cart = [];
@@ -468,25 +404,25 @@ function konfirmasiBayar() {
 
 function showStruk(trx) {
   const d = new Date(trx.waktu);
-  let s = `==============================\n`;
-  s += `      ${setting.namaToko.toUpperCase()}\n`;
-  if (setting.alamat) s += `   ${setting.alamat}\n`;
-  if (setting.telp) s += `   Telp: ${setting.telp}\n`;
-  s += `==============================\n`;
-  s += ` ${d.toLocaleString('id-ID')}\n`;
-  s += ` No: #${trx.id.toString().slice(-6)}\n`;
-  s += `------------------------------\n`;
+  let s = '==============================\n';
+  s += '      ' + setting.namaToko.toUpperCase() + '\n';
+  if (setting.alamat) s += '   ' + setting.alamat + '\n';
+  if (setting.telp) s += '   Telp: ' + setting.telp + '\n';
+  s += '==============================\n';
+  s += ' ' + d.toLocaleString('id-ID') + '\n';
+  s += ' No: #' + trx.id.toString().slice(-6) + '\n';
+  s += '------------------------------\n';
   trx.items.forEach(i => {
-    s += `${i.nama}\n`;
-    s += `  ${i.qty} x ${i.harga.toLocaleString('id-ID')} = ${(i.qty*i.harga).toLocaleString('id-ID')}\n`;
+    s += i.nama + '\n';
+    s += '  ' + i.qty + ' x ' + i.harga.toLocaleString('id-ID') + ' = ' + (i.qty*i.harga).toLocaleString('id-ID') + '\n';
   });
-  s += `------------------------------\n`;
-  s += `TOTAL     : Rp ${trx.total.toLocaleString('id-ID')}\n`;
-  s += `TUNAI     : Rp ${trx.uang.toLocaleString('id-ID')}\n`;
-  s += `KEMBALI   : Rp ${trx.kembali.toLocaleString('id-ID')}\n`;
-  s += `==============================\n`;
-  s += `    Terima kasih 🙏\n`;
-  s += `   Selamat menikmati\n`;
+  s += '------------------------------\n';
+  s += 'TOTAL     : Rp ' + trx.total.toLocaleString('id-ID') + '\n';
+  s += 'TUNAI     : Rp ' + trx.uang.toLocaleString('id-ID') + '\n';
+  s += 'KEMBALI   : Rp ' + trx.kembali.toLocaleString('id-ID') + '\n';
+  s += '==============================\n';
+  s += '    Terima kasih 🙏\n';
+  s += '   Selamat menikmati\n';
   document.getElementById('strukContent').textContent = s;
   document.getElementById('modalStruk').classList.add('show');
 }
@@ -494,6 +430,8 @@ function showStruk(trx) {
 function cetakStruk() {
   const w = window.open('', '', 'width=300,height=600');
   w.document.write('<pre style="font-family:monospace; font-size:12px;">' + document.getElementById('strukContent').textContent + '</pre>');
+  w.document.close();
+  w.focus();
   w.print();
 }
 
@@ -503,6 +441,7 @@ function closeModalStruk() {
   showPage('dashboard', dashBtn);
 }
 
+// ===== MENU =====
 let currentImg = '';
 
 function previewGambar(e) {
@@ -524,9 +463,7 @@ function simpanMenu() {
   const kategori = document.getElementById('mKategori').value.trim() || 'Umum';
   const harga = parseInt(document.getElementById('mHarga').value) || 0;
   const hpp = parseInt(document.getElementById('mHpp').value) || 0;
-  
   if (!nama || harga <= 0) { alert('Nama dan harga wajib diisi!'); return; }
-  
   if (id) {
     const m = menus.find(x => x.id == id);
     m.nama = nama; m.kategori = kategori; m.harga = harga; m.hpp = hpp;
@@ -534,7 +471,7 @@ function simpanMenu() {
   } else {
     menus.push({ id: Date.now(), nama, kategori, harga, hpp, gambar: currentImg });
   }
-  saveMenus();
+  localStorage.setItem('kasir_menus', JSON.stringify(menus));
   resetForm();
   renderListMenu();
   renderProduk();
@@ -558,7 +495,7 @@ function editMenu(id) {
 function hapusMenu(id) {
   if (!confirm('Hapus menu ini?')) return;
   menus = menus.filter(x => x.id !== id);
-  saveMenus();
+  localStorage.setItem('kasir_menus', JSON.stringify(menus));
   renderListMenu();
   renderProduk();
 }
@@ -577,4 +514,8 @@ function resetForm() {
 
 function renderListMenu() {
   const el = document.getElementById('listMenu');
-  if (!menus.length) { el.innerHTML = '<div class="empty">Belum ada menu</div
+  if (!menus.length) { el.innerHTML = '<div class="empty">Belum ada menu</div>'; return; }
+  el.innerHTML = '<table><thead><tr><th>Gambar</th><th>Nama</th><th>Kategori</th><th>Harga</th><th>HPP</th><th>Margin</th><th>Aksi</th></tr></thead><tbody>' +
+    menus.map(m => `
+      <tr>
+        <td><img src="${m.gambar || 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22><
